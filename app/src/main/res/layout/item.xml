@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="@drawable/selector"
+    android:clickable="true"
+    android:longClickable="true"
+    android:orientation="horizontal"
+    android:paddingVertical="@dimen/vertical_padding"
+    android:paddingEnd="@dimen/horizontal_padding" >
+    <TextView
+        android:id="@+id/num"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingHorizontal="4dp"
+        android:textSize="@dimen/text_size"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/item_img"
+        android:layout_width="64dp"
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@+id/num"/>
+
+    <TextView
+        android:id="@+id/item_data"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/horizontal_margin"
+        android:layout_toStartOf="@id/item_data2"
+        android:layout_toEndOf="@+id/item_img"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/text_size" />
+
+    <TextView
+        android:id="@+id/item_data3"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="@dimen/horizontal_margin"
+        android:paddingBottom="4dp"
+        android:layout_alignParentRight="true"
+        android:gravity="bottom"
+        android:textSize="@dimen/text_size"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/item_data2"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginHorizontal="@dimen/horizontal_margin"
+        android:gravity="center"
+        android:textStyle="italic"
+        android:textSize="@dimen/text_size2" />
+
+</RelativeLayout>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="life.soundandcolor.snc.Profile"
+    android:paddingTop="?attr/actionBarSize"
+    android:background="@color/colorPrimary"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/horizontal_padding">
+
+            <TextView
+                android:id="@+id/user_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:layout_marginVertical="@dimen/vertical_margin"
+                android:background="@drawable/round_corners"
+                android:elevation="@dimen/elevation"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/padding"
+                android:textColor="@color/text_color_primary"
+                android:textSize="24dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/genres"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:tag="short_term"
+                    android:text="GENRES" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/following"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:tag="following"
+                    android:text="Following" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/recent"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:tag="recent"
+                    android:text="Recent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/saved1"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:tag="tracks"
+                    android:text="Saved Tracks" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/saved2"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:tag="albums"
+                    android:text="Saved Albums" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/top1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/text_padding"
+                android:paddingTop="@dimen/padding"
+                android:text="Top Artists:"
+                android:textSize="@dimen/text_size2"
+                android:textColor="@color/text_color_primary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/top11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:tag="long_term"
+                    android:text="All time" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/top12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:tag="medium_term"
+                    android:text="6 months" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/top13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:tag="short_term"
+                    android:text="4 weeks" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/top2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/text_padding"
+                android:paddingTop="@dimen/padding"
+                android:text="Top Tracks:"
+                android:textSize="@dimen/text_size2"
+                android:textColor="@color/text_color_primary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/top21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/margin"
+                    android:tag="long_term"
+                    android:text="All time" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/top22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/margin"
+                    android:tag="medium_term"
+                    android:text="6 months" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/top23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/margin"
+                    android:tag="short_term"
+                    android:text="4 weeks" />
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/gg"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/margin"
+                android:tag="short_term"
+                android:text="Notify Me" />
+
+        </LinearLayout>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bar"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_gravity="bottom"
+                android:backgroundTint="@color/colorPrimary" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/elevation2"
+                app:layout_anchor="@id/bar"
+                app:pressedTranslationZ="20dp"
+                app:rippleColor="@color/black"
+                app:srcCompat="@drawable/ic_home_white" />
+
+            <androidx.appcompat.view.menu.ActionMenuItemView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </FrameLayout>
+</layout>

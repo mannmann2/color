@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="life.soundandcolor.snc.Home">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/lin1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:paddingBottom="72dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:layout_marginBottom="@dimen/vertical_margin"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingBottom="216dp"
+                android:textColor="@color/text_color_primary"
+                android:textSize="56dp"
+                android:text="@string/welcome"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_gravity="center"
+                android:text="LOGIN"
+                android:textSize="48dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/text_padding"
+                android:gravity="center"
+                android:text="(via Spotify)"
+                android:textSize="@dimen/text_size2"
+                android:textColor="@color/text_color_primary"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="?attr/actionBarSize"
+            />
+
+        <!--<fragment-->
+            <!--android:id="@+id/send3"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_margin="70dp"-->
+            <!--/>-->
+
+        <ListView
+            android:id="@+id/send2"
+            android:elevation="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginVertical="70dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@color/colorPrimary"
+            android:visibility="gone">
+            <!--android:textSize="56dp"-->
+            <!--android:textColor="@color/colorPrimaryDark"-->
+            <!--android:text="@string/welcome"-->
+        </ListView>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bar1"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_gravity="bottom"
+                android:visibility="invisible"
+                android:backgroundTint="@color/colorPrimary" />
+                <!--app:navigationIcon="@drawable/ic_menu_black" />-->
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:elevation="@dimen/elevation2"
+                app:layout_anchor="@id/bar1"
+                app:pressedTranslationZ="20dp"
+                app:rippleColor="@color/black"
+                app:srcCompat="@drawable/ic_people_white" />
+
+            <androidx.appcompat.view.menu.ActionMenuItemView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </FrameLayout>
+</layout>

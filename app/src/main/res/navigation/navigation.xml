@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/home">
+
+    <fragment
+        android:id="@+id/Users"
+        android:name="life.soundandcolor.snc.Users"
+        android:label="Friends"
+        tools:layout="@layout/users">
+        <action
+            android:id="@+id/action_users_to_home"
+            app:destination="@id/Profile"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/content"
+        android:name="life.soundandcolor.snc.Content"
+        android:label="content"
+        tools:layout="@layout/content" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="extra"
+            app:argType="string" />
+        <argument
+            android:name="filter"
+            android:defaultValue="0"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_content_to_Analysis"
+            app:destination="@id/Analysis" />
+        <action
+            android:id="@+id/action_content_to_share"
+            app:destination="@id/share" />
+    </fragment>
+    <fragment
+        android:id="@+id/About"
+        android:name="life.soundandcolor.snc.About"
+        android:label="About"
+        tools:layout="@layout/about" />
+    <fragment
+        android:id="@+id/Profile"
+        android:name="life.soundandcolor.snc.Profile"
+        android:label="Profile">
+        <action
+            android:id="@+id/action_profile_to_users"
+            app:destination="@id/Users"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_profile_to_content"
+            app:destination="@id/content"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_Profile_to_home"
+            app:destination="@id/home" />
+        <action
+            android:id="@+id/action_Profile_to_genres"
+            app:destination="@id/genres" />
+    </fragment>
+    <fragment
+        android:id="@+id/Analysis"
+        android:name="life.soundandcolor.snc.Analysis"
+        android:label="Analysis"
+        tools:layout="@layout/analysis" >
+    <argument
+        android:name="ids"
+        app:argType="string" />
+        <argument
+            android:name="type"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/home"
+        android:name="life.soundandcolor.snc.Home"
+        android:label="Feed">
+        <action
+            android:id="@+id/action_home_to_Profile"
+            app:destination="@id/Profile" />
+        <action
+            android:id="@+id/action_home_to_Analysis"
+            app:destination="@id/Analysis" />
+        <action
+            android:id="@+id/action_home_to_Users"
+            app:destination="@id/Users" />
+        <action
+            android:id="@+id/action_home_to_share"
+            app:destination="@id/share" />
+        <action
+            android:id="@+id/action_home_to_chats"
+            app:destination="@id/chats" />
+    </fragment>
+    <fragment
+        android:id="@+id/genres"
+        android:name="life.soundandcolor.snc.Genres"
+        android:label="Genres" >
+        <action
+            android:id="@+id/action_genres_to_content"
+            app:destination="@id/content">
+            <argument
+                android:name="filter"
+                app:argType="string" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/share"
+        android:name="life.soundandcolor.snc.Share"
+        android:label="share"
+        tools:layout="@layout/share" >
+        <argument
+            android:name="share"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/chats"
+        android:name="life.soundandcolor.snc.Chats"
+        android:label="Chats"
+        tools:layout="@layout/chats" >
+        <action
+            android:id="@+id/action_chats_to_chat"
+            app:destination="@id/chat" />
+    </fragment>
+    <fragment
+        android:id="@+id/chat"
+        android:name="life.soundandcolor.snc.Chat"
+        android:label="Chat" >
+        <argument
+            android:name="user"
+            app:argType="string" />
+    </fragment>
+</navigation>

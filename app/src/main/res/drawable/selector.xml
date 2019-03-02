@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:state_pressed="true"
+        android:drawable="@color/colorPrimaryDark"
+        android:translationZ="8dp"
+        />
+    <item
+        android:state_pressed="false"
+        android:drawable="@color/colorPrimary"
+         />
+    <!--<item-->
+        <!--android:state_activated="true"-->
+        <!--android:drawable="@color/colorAccent2" />-->
+
+    <!--<item-->
+        <!--android:state_selected="true"-->
+        <!--android:drawable="@color/colorAccent" />-->
+    <!--<item android:state_focused="true"-->
+        <!--android:drawable="@color/recent" />-->
+        <!--/>-->
+</selector>
+
+<!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--<item android:state_window_focused="false" android:drawable="@android:color/transparent" />-->
+<!--&lt;!&ndash;-->
+        <!--Even though these two point to the same resource, have two states so-->
+        <!--the drawable will invalidate itself when coming out of pressed state.-->
+<!--&ndash;&gt;-->
+<!--<item android:state_focused="true" android:state_enabled="false"-->
+    <!--android:state_pressed="true"     android:drawable="@drawable/selected_state" />-->
+<!--<item android:state_focused="true" android:state_enabled="false"-->
+    <!--android:drawable="@drawable/selected_state" />-->
+<!--<item android:state_focused="true" android:state_pressed="true"-->
+    <!--android:drawable="@drawable/selected_state" />-->
+<!--<item android:state_focused="false" android:state_pressed="true"-->
+    <!--android:drawable="@drawable/selected_state" />-->
+<!--<item android:state_focused="true"-->
+    <!--android:drawable="@drawable/selected_state" />-->
+<!--</selector>-->

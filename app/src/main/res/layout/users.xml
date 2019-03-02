@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="life.soundandcolor.snc.Users"
+    android:paddingTop="?attr/actionBarSize"
+    android:background="@color/colorPrimary"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:paddingHorizontal="@dimen/padding">
+
+            <EditText
+                android:id="@+id/input_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/send"
+                android:hint="Enter username"
+                android:textColorHint="@color/colorPrimaryDark"
+                />
+            <Button
+                android:id="@+id/send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/margin"
+                android:text="Send" />
+
+        </RelativeLayout>
+
+        <!--<TextView-->
+            <!--android:id="@+id/response"-->
+            <!--android:layout_width="match_parent"-->
+            <!--style="@style/TextAppearance.AppCompat.Large"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="center"-->
+            <!--android:visibility="gone"-->
+            <!--/>-->
+
+        <Button
+            android:id="@+id/add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin"
+            android:text="Add Friend"
+            />
+
+        <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="?attr/colorPrimary"-->
+        <!--android:minHeight="?attr/actionBarSize"-->
+        <!--android:theme="?attr/actionBarTheme" />-->
+
+        <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical" >-->
+        <!--</LinearLayout>-->
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <!--<androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--android:id="@+id/titleConstraint"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+
+    <!--<Button-->
+    <!--android:id="@+id/playButton"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginStart="@dimen/horizontal_margin"-->
+    <!--android:layout_marginEnd="@dimen/horizontal_margin"-->
+    <!--android:paddingStart="@dimen/button_padding"-->
+    <!--android:paddingEnd="@dimen/button_padding"-->
+    <!--android:text="Play"-->
+    <!--android:textColor="@color/colorAccent"-->
+    <!--android:textSize="@dimen/button_text_size"-->
+    <!--android:textStyle="bold"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@+id/titleImage" />-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/titleImage"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="@dimen/image_header_height"-->
+    <!--android:layout_marginStart="@dimen/horizontal_margin"-->
+    <!--android:layout_marginEnd="@dimen/horizontal_margin"-->
+    <!--android:scaleType="fitCenter"-->
+    <!--app:layout_constraintBottom_toTopOf="@+id/playButton"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintHorizontal_bias="1.0"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent"-->
+    <!--app:srcCompat="@drawable/ic_refresh_black" />-->
+
+    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+</layout>

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Sound &amp; Color</string>
+    <string name="error_message">error</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action">Search</string>
+    <string name="share">Share</string>
+    <string name="about">Sound &amp; Color\n\nSpotify + Music + Data</string>
+    <string name="welcome">Welcome to Sound &amp; Color</string>
+    <string name="CLIENT_ID">e6f5f053a682454ca4eb1781064d3881</string>
+    <string name="CLIENT_SECRET">e4294f2365ec45c0be87671b0da16596</string>
+    <string name="REDIRECT_URI">https://www.google.com</string>
+
+    <string name="channel_name">Messages</string>
+    <string name="channel_description">Message Notifications</string>
+
+    <string name="com_spotify_sdk_redirect_scheme">https</string>
+    <string name="com_spotify_sdk_redirect_host">www.google.com</string>
+</resources>
