@@ -12,7 +12,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import life.soundandcolor.snc.databinding.ShareBinding
 import life.soundandcolor.snc.utilities.DatabaseHelper
-import life.soundandcolor.snc.utilities.Helper
+import life.soundandcolor.snc.utilities.NetworkUtils
+import life.soundandcolor.snc.utilities.NetworkUtils.getFriendObjects
 import java.util.ArrayList
 
 class Share: Fragment() {
@@ -34,23 +35,33 @@ class Share: Fragment() {
                 inflater, R.layout.share, container, false)
 
         myDb = DatabaseHelper(context)
+        res = myDb.check()
+        res.moveToNext()
+        val owner = res.getString(0)
+        val js = getFriendObjects(owner)
 
-        var listItems = ArrayList<String>()
-        var listItems2 = ArrayList<Int>()
-        res = Helper.getFriends(myDb)
-        while (res.moveToNext())
-            listItems.add(res.getString(0))
+        var names = ArrayList<String>()
+        var usernames = ArrayList<String>()
+        var selected = ArrayList<Int>()
+        for (i in 0 until js.length()) {
+            val temp = js.getJSONObject(i)
+            usernames.add(temp.getString("id"))
+            names.add(temp.getString("display_name"))
+        }
+//        res = Helper.getFriends(myDb)
+//        while (res.moveToNext())
+//            trending.add(res.getString(0))
 
-        adapter = ShareAdapter(context!!, listItems){
+        adapter = ShareAdapter(context!!, names){
             var x = selected_count
 
-            if (!(it in listItems2)) {
-                listItems2.add(it)
+            if (!(it in selected)) {
+                selected.add(it)
                 selected_count += 1
             }
             else {
                 selected_count -= 1
-                listItems2.remove(it)
+                selected.remove(it)
             }
             if (selected_count == 0)
                 binding.done.visibility = View.GONE
@@ -60,8 +71,9 @@ class Share: Fragment() {
         binding.list.setAdapter(adapter)
 
         binding.done.setOnClickListener {
-            for (position in listItems2) {
-                myDb.send(listItems[position], share, 1)
+            for (position in selected) {
+                myDb.send(usernames[position], share, 1)
+                NetworkUtils.getRequest("send-message", listOf("username" to owner, "friend" to usernames[position], "message" to share))
             }
             Toast.makeText(context, "Message sent", Toast.LENGTH_SHORT).show()
             fragmentManager!!.popBackStack()

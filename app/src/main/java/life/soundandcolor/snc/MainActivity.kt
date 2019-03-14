@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 //                handleSendMultipleImages(intent) // Handle multiple images being sent
 //            }
             else -> {
-                // Handle other intents, such as being started from the home screen
+                // Handle other intents, such as being started type the home screen
             }
         }
     }
@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity() {
             Timber.e("uri: "+it.toString())
         }
     }
-//
+
 //    private fun handleSendMultipleImages(intent: Intent) {
 //        intent.getParcelableArrayListExtra<Parcelable>(Intent.EXTRA_STREAM)?.let {
 //            // Update UI to reflect multiple images being shared

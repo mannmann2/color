@@ -8,18 +8,18 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.TextView
 
-class ShareAdapter(private val context: Context, private val users: ArrayList<String>, val itemClick: (Int) -> Unit)
+class ShareAdapter(private val context: Context, private val names: ArrayList<String>, val itemClick: (Int) -> Unit)
     : BaseAdapter() {
 
     lateinit private var simple1: TextView
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     override fun getCount(): Int {
-        return users.size
+        return names.size
     }
 
     override fun getItem(position: Int): Any {
-        return users[position]
+        return names[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -33,7 +33,7 @@ class ShareAdapter(private val context: Context, private val users: ArrayList<St
         val send = rowView.findViewById(R.id.send) as Button
         val undo = rowView.findViewById(R.id.undo) as Button
 
-        simple1.text = users[position]
+        simple1.text = names[position]
 
         send.setOnClickListener {
             send.visibility = View.GONE

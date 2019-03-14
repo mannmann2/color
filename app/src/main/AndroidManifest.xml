@@ -35,6 +35,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <service android:name="services.MessageService"
+            android:exported="false"/>
+
         <!--<activity-->
             <!--android:name=".Content"-->
             <!--android:parentActivityName=".MainActivity">-->

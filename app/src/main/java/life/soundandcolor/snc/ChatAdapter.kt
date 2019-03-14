@@ -72,8 +72,16 @@ class ChatAdapter(private val context: Context, private val messages: ArrayList<
                 mTextView2.text = js.getString("artist")
             }
         }
+        else if ("open.spotify.com" in message) {
+            simple1.visibility = View.GONE
+
+            val mTextView = view.findViewById(R.id.item_data) as TextView
+            mTextView.text = message
+            relLay.tag = message
+
+        }
         else {
-            simple1.text = messages[position]
+            simple1.text = message
             relLay.visibility = View.GONE
         }
 

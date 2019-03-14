@@ -1,31 +1,27 @@
 package life.soundandcolor.snc
 
-import android.content.Context
 import org.json.JSONException
 import org.json.JSONObject
 
 import android.content.Intent
-import android.net.Uri
 import android.view.*
 import android.widget.*
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 
 import com.squareup.picasso.Picasso
 import life.soundandcolor.snc.utilities.Helper
 import timber.log.Timber
 
-class ContentAdapter(id: String, user: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ContentAdapter(username: String, name: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var mData: Array<String?>? = null
-    var id1: String
-    var user1: String
+    var username: String
+    var name: String
 
     init {
-        id1 = id
-        user1 = user
+        this.username = username
+        this.name = name
     }
 
     inner class ArtistAdapterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -62,16 +58,16 @@ class ContentAdapter(id: String, user: String) : RecyclerView.Adapter<RecyclerVi
                             val uri = child.tag.toString()
                             var shareBody = ""
 
-                            when (id1) {
+                            when (username) {
                                 "Following", "Top Artists" -> {
-                                    shareBody += "Here's an artist from " + user1 + "'s " + id1 + "... " + mTextView.text
+                                    shareBody += "Here's an artist type " + name + "'s " + username + "... " + mTextView.text
                                 }
                                 "Recent", "Top Tracks", "Saved Tracks" -> {
-                                    shareBody += "Here's a song from " + user1 + "'s " + id1 + "... " +
+                                    shareBody += "Here's a song type " + name + "'s " + username + "... " +
                                             mTextView.text.split("\t\t/\t\t")[0] + " by " + mTextView2.text
                                 }
                                 "Saved Albums" -> {
-                                    shareBody += "Here's an album from " + user1 + "'s " + id1 + "... " + mTextView2.text
+                                    shareBody += "Here's an album type " + name + "'s " + username + "... " + mTextView2.text
                                 }
                             }
                             shareBody += "\n" + uri + "\n\n- via Sound & Color"
@@ -170,14 +166,13 @@ class ContentAdapter(id: String, user: String) : RecyclerView.Adapter<RecyclerVi
                     holder.mTextView.text = js.getString("name") + "  •  " + js.get("album")
                     holder.mTextView2.text = js.getString("artist")
 
-                    if (id1=="Recent") {
+                    if (username=="Recent") {
                         holder.mTextView.gravity = Gravity.TOP
                         holder.mTextView.setPadding(0,16,0,0)
                         holder.mTextView2.gravity = Gravity.TOP
                         holder.mTextView2.setPadding(0,16,0,0)
                         holder.mTextView4.visibility = View.VISIBLE
-                        holder.mTextView4.text = Helper.display_time(js.getString("timestamp"))
-
+                        holder.mTextView4.text = Helper.displayTime(js.getString("timestamp"))
                     }
                 }
 
@@ -207,7 +202,7 @@ class ContentAdapter(id: String, user: String) : RecyclerView.Adapter<RecyclerVi
         mData = mData!!.dropLast(1).toTypedArray()
         notifyItemRemoved(mData!!.size + 1)
         mData= mData!!.plus(listItems)
-//        notifyItemRangeChanged(mData!!.size, listItems.size)
+//        notifyItemRangeChanged(mData!!.size, trending.size)
         notifyDataSetChanged()
     }
 

@@ -79,7 +79,7 @@
         android:name="ids"
         app:argType="string" />
         <argument
-            android:name="type"
+            android:name="from"
             app:argType="string" />
     </fragment>
     <fragment
@@ -137,7 +137,10 @@
         android:name="life.soundandcolor.snc.Chat"
         android:label="Chat" >
         <argument
-            android:name="user"
+            android:name="username"
+            app:argType="string" />
+        <argument
+            android:name="name"
             app:argType="string" />
     </fragment>
 </navigation>

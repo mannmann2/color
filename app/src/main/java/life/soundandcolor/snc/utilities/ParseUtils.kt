@@ -1,7 +1,7 @@
 package life.soundandcolor.snc.utilities
 
 import android.content.Context
-import life.soundandcolor.snc.utilities.Helper.to_timestamp
+import life.soundandcolor.snc.utilities.Helper.toTimestamp
 
 import org.json.JSONArray
 import org.json.JSONException
@@ -10,7 +10,7 @@ import org.json.JSONObject
 object ParseUtils {
 
     @Throws(JSONException::class)
-    fun getSimpleStringsFromJson(context: Context, json: JSONObject, id: String, user: String): JSONArray? {
+    fun getSimpleStringsFromJson(context: Context, json: JSONObject, id: String, user: String, name: String): JSONArray? {
 
         val myDb = DatabaseHelper(context)
 
@@ -62,7 +62,8 @@ object ParseUtils {
                     temp.put("type", "artist")
                     parsedData.put(i, temp)
 
-                    temp.put("user", user)
+                    temp.put("username", user)
+                    temp.put("display_name", name)
                     myDb.add(temp, myDb.writableDatabase, "following")
                 }
                 return parsedData
@@ -113,11 +114,12 @@ object ParseUtils {
 //                    temp.put("artist_id", track.getJSONObject("album").getJSONArray("artists")
 //                            .getJSONObject(0).getString("id"))
                     temp.put("duration", track.getInt("duration_ms"))
-                    temp.put("timestamp", to_timestamp(dayForecast.getString("played_at")))
+                    temp.put("timestamp", toTimestamp(dayForecast.getString("played_at")))
                     temp.put("type", "track")
                     parsedData.put(i, temp)
 
-                    temp.put("user", user)
+                    temp.put("username", user)
+                    temp.put("display_name", name)
                     myDb.add(temp, myDb.writableDatabase, "feed")
                 }
                 return parsedData

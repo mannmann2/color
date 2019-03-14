@@ -1,0 +1,25 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/elevation2"
+        app:layout_anchor="@id/bar"
+        app:pressedTranslationZ="20dp"
+        app:rippleColor="@color/black"
+        app:srcCompat="@drawable/ic_home_white" />
+
+    <!--<androidx.appcompat.view.menu.ActionMenuItemView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

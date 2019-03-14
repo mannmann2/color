@@ -5,10 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.Button
 import android.widget.TextView
 
-class UsersAdapter(private val context: Context, private val users: ArrayList<String>, private var description: ArrayList<String>?, private val tag: String?)
+class UsersAdapter(private val context: Context, private val names: ArrayList<String>, private var description: ArrayList<String>?, private val tag: String?)
     : BaseAdapter() {
 
     lateinit private var simple1: TextView
@@ -16,11 +15,11 @@ class UsersAdapter(private val context: Context, private val users: ArrayList<St
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     override fun getCount(): Int {
-        return users.size
+        return names.size
     }
 
     override fun getItem(position: Int): Any {
-        return users[position]
+        return names[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -33,7 +32,7 @@ class UsersAdapter(private val context: Context, private val users: ArrayList<St
         simple1 = rowView.findViewById(R.id.simple1) as TextView
         simple2 = rowView.findViewById(R.id.simple2) as TextView
 
-        simple1.text = users[position]
+        simple1.text = names[position]
         simple2.text = description!![position]
         if (simple2.text == "")
             simple2.visibility = View.GONE

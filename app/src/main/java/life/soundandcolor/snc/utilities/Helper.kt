@@ -21,10 +21,8 @@ object Helper {
     //        return time;
     //    }
 
-
     fun play(view: View) {
-        // log play from X by Y on Z(feed, top tracks etc)
-
+//        log play type X by Y on Z(feed, top tracks etc)
 //        Fuel.put("https://api.spotify.com/v1/me/player/play", listOf(""))
 //                .header("Authorization", "Bearer " + token)
         val context = view.context
@@ -34,9 +32,8 @@ object Helper {
     }
 
     fun share(view: View, uri: String, user: CharSequence, song: CharSequence, artist: CharSequence) {
-        // log share of ABC from X by Y on Z
-
-        var shareBody = "Here's a song played by  " + user + "... " +
+        // log share of ABC type X by Y on Z maybe as a service?
+        var shareBody = "Here's a song played by " + user + "... " +
                 song + " by " + artist
 
         shareBody += "\n" + uri + "\n\n- via Sound & Color"
@@ -48,7 +45,7 @@ object Helper {
         view.context.startActivity(Intent.createChooser(shareIntent, "Share..."))
     }
 
-    fun parse_message(message: String): String {
+    fun parseMessage(message: String): String {
         if (("https://open.spotify.com" in message) && !("url\":\"http" in message)) {
             val js = JSONObject()
             js.put("url", message)
@@ -71,11 +68,7 @@ object Helper {
         else return message
     }
 
-    fun getFriends(myDb: DatabaseHelper): Cursor {
-        return myDb.get2("users")
-    }
-
-    fun display_time(timestamp: String): String {
+    fun displayTime(timestamp: String): String {
         val cal = Calendar.getInstance()
         val ms = timestamp.toLong()
         cal.timeInMillis = ms
@@ -84,7 +77,7 @@ object Helper {
         return formatter.format(cal.time)
     }
 
-    fun to_timestamp(date: String): Long {
+    fun toTimestamp(date: String): Long {
         var formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         try{
             return formatter.parse(date).getTime()

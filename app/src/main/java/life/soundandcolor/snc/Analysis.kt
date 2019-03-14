@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import life.soundandcolor.snc.databinding.AnalysisBinding
 import life.soundandcolor.snc.utilities.DatabaseHelper
 import life.soundandcolor.snc.utilities.NetworkUtils
+import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
 
@@ -20,7 +21,7 @@ class Analysis : Fragment() {
     lateinit internal var myDb: DatabaseHelper
     lateinit internal var res: Cursor
     lateinit internal var ids: String
-    lateinit internal var type: String
+    lateinit internal var from: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -31,20 +32,22 @@ class Analysis : Fragment() {
 
         var args = AnalysisArgs.fromBundle(arguments)
         ids = args.ids
-        type = args.type
+        from = args.from
 
         myDb = DatabaseHelper(context)
-        res = myDb.get()
+        res = myDb.check()
         res.moveToFirst()
 
-        Timber.e("User " + res.getString(0))
-        val token = res.getString(1)
-        val refresh = res.getString(2)
+        val user = res.getString(0)
+//        val token = res.getString(1)
+//        val refresh = res.getString(2)
 
-        var jsonResponse = NetworkUtils.getRequest(BASE_URL1, listOf(Analysis.IDS_PARAM to ids), token, refresh, myDb)
-        var json = jsonResponse!!.getJSONArray("audio_features")
-
+//        var jsonResponse = NetworkUtils.getRequest("https://api.spotify.com/v1/audio-features",
+//                      listOf("usernames" to usernames), token, refresh, myDb)
+//        var json = jsonResponse!!.getJSONArray("audio_features")
+        var json = JSONArray(NetworkUtils.getRequest("features", listOf("username" to user, "ids" to ids)))
         var L = json.length()
+
         var keys = listOf("danceability", "energy", "loudness", "speechiness", "acousticness", "instrumentalness", "liveness", "valence", "mode", "tempo", "duration_ms")
         var D = JSONObject()
         for (key in keys)
@@ -71,9 +74,12 @@ class Analysis : Fragment() {
         }
         binding.analysisText.text = text
 
-        if (type == "feed") {
-            jsonResponse = NetworkUtils.getRequest(BASE_URL2, listOf(TRACKS_PARAM to ids), token, refresh, myDb)
-            var json = jsonResponse!!.getJSONArray("tracks")
+        if (from == "feed") {
+//            jsonResponse = NetworkUtils.getRequest("https://api.spotify.com/v1/recommendations",
+//                    listOf("seed_tracks" to usernames), token, refresh, myDb)
+//            var json = jsonResponse!!.getJSONArray("tracks")
+            json = JSONArray(NetworkUtils.getRequest("recommendations",
+                    listOf("username" to user, "seed_tracks" to ids)))
 
             val listItems = ArrayList<String>()
             for (i in 0 until json.length()) {
@@ -88,13 +94,5 @@ class Analysis : Fragment() {
 
         }
         return binding.root
-    }
-
-    companion object {
-        internal val IDS_PARAM = "ids"
-        internal val TRACKS_PARAM = "seed_tracks"
-
-        private val BASE_URL1 = "https://api.spotify.com/v1/audio-features"
-        private val BASE_URL2 = "https://api.spotify.com/v1/recommendations"
     }
 }

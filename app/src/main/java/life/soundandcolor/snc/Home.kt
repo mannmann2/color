@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.StrictMode
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +28,7 @@ import life.soundandcolor.snc.utilities.ParseUtils
 import org.json.JSONObject
 import org.json.JSONException
 import timber.log.Timber
-import java.util.*
+import java.util.Collections
 import kotlin.collections.ArrayList
 
 class Home : Fragment() {
@@ -46,32 +47,28 @@ class Home : Fragment() {
     var loadMore: Boolean = false
     lateinit internal var myDb: DatabaseHelper
     lateinit internal var res: Cursor
-    private var curMenuItem: MenuItem? = null
-    private var lin1: LinearLayout? = null
+    private var login: LinearLayout? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
+        StrictMode.enableDefaults()
         val binding: HomeBinding = DataBindingUtil.inflate(
                 inflater, R.layout.home, container, false)
 
         myDb = DatabaseHelper(context)
-        val cur = myDb.get()
-        cur.moveToNext()
 
-        lin1 = binding.lin1
+        login = binding.login
         mRecyclerView = binding.recyclerview2
-
         if (myDb.check().count == 1) {
-            lin1!!.setVisibility(View.GONE)
+            login!!.setVisibility(View.GONE)
             mRecyclerView!!.setVisibility(View.VISIBLE)
         }
         else {
-            lin1!!.setVisibility(View.VISIBLE)
+            login!!.setVisibility(View.VISIBLE)
             mRecyclerView!!.setVisibility(View.GONE)
         }
 
-        binding.login.setOnClickListener { v: View -> onRequestTokenClicked() }
+        binding.loginButton.setOnClickListener { v: View -> onRequestTokenClicked() }
 
         binding.fab1.setOnClickListener { v: View ->
             v.findNavController().navigate(HomeDirections.actionHomeToProfile())
@@ -83,14 +80,13 @@ class Home : Fragment() {
         mRecyclerView!!.setLayoutManager(layoutManager)
 
         val feed_data = get_feed()
-
-        feedAdapter = FeedAdapter(cur.getString(1)) {
+        feedAdapter = FeedAdapter() {
 
 //            val friends = Helper.getFriends(DatabaseHelper(context))
-//            val listItems = ArrayList<String>()
+//            val trending = ArrayList<String>()
 //            while (friends.moveToNext())
-//                listItems.add(friends.getString(0))
-//            val adapter = ArrayAdapter<String>(context, R.layout.simple, listItems)
+//                trending.add(friends.getString(0))
+//            val adapter = ArrayAdapter<String>(context, R.layout.simple, trending)
 //            binding.send2.adapter = adapter
 //            binding.send2.visibility = View.VISIBLE
 //
@@ -128,7 +124,7 @@ class Home : Fragment() {
             findNavController().navigate(HomeDirections.actionHomeToChats())
         }
         else {
-            return NavigationUI.onNavDestinationSelected(item!!,
+            return NavigationUI.onNavDestinationSelected(item,
                     view!!.findNavController()) || super.onOptionsItemSelected(item)
         }
         return true
@@ -137,10 +133,10 @@ class Home : Fragment() {
 
     fun get_feed(): ArrayList<JSONObject> {
         var data = ArrayList<JSONObject>()
-        res = myDb.get2("feed")
+        res = myDb.get("feed")
         while (res.moveToNext()) {
             val temp = JSONObject()
-            for (i in 0..9)
+            for (i in 0..10)
                 temp.put(res.getColumnName(i), res.getString(i))
             data.add(temp)
         }
@@ -163,37 +159,39 @@ class Home : Fragment() {
     inner class Fetch : AsyncTask<String, Void, Array<String>>() {
 
 //        override fun doInBackground(vararg params: String): Array<String>? {
-//            res = myDb.get2("users")
+//            res = myDb.get("users")
 //            while (res.moveToNext())
 //                Fetch2(res.getString(0), res.getString(1), res.getString(2)).execute()
 //
 //            return null
 //        }
-//
 //        override fun onPostExecute(data: Array<String>?) {
 //            feedAdapter.setData(get_feed())
 //            layoutManager!!.scrollToPositionWithOffset(0, 0);
 //        }
 //    }
 //
-//    inner class Fetch2(user: String, token:String, refresh:String) : AsyncTask<String, Void, Array<String>>() {
+//    inner class Fetch2(username: String, token:String, refresh:String) : AsyncTask<String, Void, Array<String>>() {
 //
-//        val user = user
+//        val username = username
 //        val token = token
 //        val refresh = refresh
 
         override fun doInBackground(vararg params: String): Array<String>? {
-            res = myDb.get2("users")
+            res = myDb.get("users")
             while (res.moveToNext()) {
 
                 val user = res.getString(0)
-                val token = res.getString(1)
-                val refresh = res.getString(2)
+//                val token = res.getString(1)
+//                val refresh = res.getString(2)
                 Timber.e("User " + user)
 
                 try {
-                    val jsonResponse = NetworkUtils.getRequest(BASE_URL3, listOf(LIMIT_PARAM to Integer.toString(limit)), token, refresh, myDb)
-                    ParseUtils.getSimpleStringsFromJson(context!!, jsonResponse!!, "Recent", user)
+//                    val jsonResponse = NetworkUtils.getRequest("https://api.spotify.com/v1/me/player/recently-played",
+//                            listOf("limit" to Integer.toString(limit)), token, refresh, myDb)
+                    val jsonResponse = JSONObject(NetworkUtils.getRequest("recently-played",
+                            listOf("username" to user)))
+                    ParseUtils.getSimpleStringsFromJson(context!!, jsonResponse, "Recent", user, res.getString(1))
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -207,17 +205,12 @@ class Home : Fragment() {
         }
     }
 
-        companion object {
-            private val limit = 50
+    companion object {
+        private val limit = 50
 
-            internal val LIMIT_PARAM = "limit"
-            internal val AFTER_PARAM = "after"
+        internal val AFTER_PARAM = "after"
 //            internal val BEFORE_PARAM = "before"
-
-            private val BASE_URL3 = "https://api.spotify.com/v1/me/player/recently-played"
-        }
-
-
+    }
 
 
     /* --------------------------------------- LOGIN STUFF --------------------------------------------- */
@@ -226,11 +219,19 @@ class Home : Fragment() {
     private fun getAuthenticationRequest(type: AuthenticationResponse.Type): AuthenticationRequest {
         return AuthenticationRequest.Builder(getString(R.string.CLIENT_ID), type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(arrayOf("user-read-email","user-top-read","user-follow-read","user-library-read",
-                        "user-read-recently-played","user-read-email","user-read-currently-playing","user-read-playback-state",
-                        "user-modify-playback-state","streaming","playlist-modify-private","playlist-modify-public"))
-                .setCampaign("your-campaign-token")
-                .build()
+                .setScopes(arrayOf(
+                        "user-read-recently-played",
+                        "user-top-read",
+                        "user-library-read",
+                        "playlist-modify-private",
+                        "playlist-modify-public",
+                        "user-read-email",
+                        "user-read-currently-playing",
+                        "user-read-playback-state",
+                        "user-modify-playback-state",
+                        "app-remote-control",
+                        "streaming",
+                        "user-follow-read")).build()
     }
 
     fun createLoginActivityIntent(request: AuthenticationRequest): Intent {
@@ -241,7 +242,7 @@ class Home : Fragment() {
 
     fun onRequestTokenClicked() {
         val request = getAuthenticationRequest(AuthenticationResponse.Type.CODE)
-//        AuthenticationClient.openLoginActivity(activity, AUTH_TOKEN_REQUEST_CODE, request)
+//        AuthenticationClient.openLoginActivity(activity, AUTH_CODE_REQUEST_CODE, request)
         val intent = createLoginActivityIntent(request)
         startActivityForResult(intent, AUTH_CODE_REQUEST_CODE)
     }
@@ -253,57 +254,48 @@ class Home : Fragment() {
 //        if (AUTH_CODE_REQUEST_CODE == requestCode) {
 //            mAccessToken = response.accessToken
         mAccessCode = response.code
-
+        Timber.e(mAccessCode)
         val params = listOf("grant_type" to "authorization_code",
-                            "code" to mAccessCode!!,
+                            "code" to mAccessCode,
                             "redirect_uri" to getString(R.string.REDIRECT_URI),
                             "client_id" to getString(R.string.CLIENT_ID),
                             "client_secret" to getString(R.string.CLIENT_SECRET))
 
         var (_, res, _) = Fuel.post("https://accounts.spotify.com/api/token", params).response()
-
         var content = JSONObject(res.body().asString("application/json"))
+//        var content = JSONObject(NetworkUtils.getRequest("login1",
+//                listOf("code" to mAccessCode!!)))
         val token = content.getString("access_token")
         val refresh = content.getString("refresh_token")
         Timber.e("token " + token)
         Timber.e("refresh " + refresh)
 
-        val json = NetworkUtils.getRequest("https://api.spotify.com/v1/me", null, token, refresh, myDb)
-        val username = json!!.getString("id")
+//        val json = NetworkUtils.getRequest("https://api.spotify.com/v1/me", null, token, refresh, myDb)
+        val json = JSONObject(NetworkUtils.getRequest("login",
+                listOf("access_token" to token, "refresh_token" to refresh)))
+        val username = json.getString("id")
 
         val kkk = JSONObject()
         kkk.put("username", username)
-        kkk.put("token", token)
-        kkk.put("refresh", refresh)
+//        kkk.put("token", token)
+//        kkk.put("refresh", refresh)
         kkk.put("name", json.getString("display_name"))
+        val images = json.getJSONArray("images")
+        if (images.length()>0)
+            kkk.put("img", images.getJSONObject(0).getString("url"))
+        else
+            kkk.put("img", null)
         kkk.put("email", json.getString("email"))
-        kkk.put("uri", json.getString("uri"))
         kkk.put("owner", true)
 
         Timber.e(kkk.toString())
         myDb.add(kkk, myDb.writableDatabase, "users")
         myDb.change(username)
 
-        lin1!!.setVisibility(View.GONE)
+        login!!.setVisibility(View.GONE)
         mRecyclerView!!.setVisibility(View.VISIBLE)
         fragmentManager!!.beginTransaction().detach(this).attach(this).commit()
 //        }
-    }
-
-    fun tokenClicked() {
-        val user = "mannmann2"
-        val kkk = JSONObject()
-        kkk.put("username", user)
-        kkk.put("token", "AQAb0eqxlZ56Eb7oTfIFon4KjPsCKNxyoakZvYakvvtCaQd6i3jQ6YyK3381XciPB0nO8a0PcmoIQxFsC9Lm90MrkUV6oWFPTJQXo3XeKmL1R5-U_g229Cu1O-OD6V43Ijk")
-        kkk.put("refresh", "BQAKpySgbM54IJx8aqz3SuXIUHyyeR3gZl0tzuDWCH_NKavpbtH1VEVNddnNQk5KbhckfWBC0QY0SDwFKvZwb1u0hvbNXo3nCDnWYmLa0Sj2Lz7r3p_iSt-1AHrAn70lETTk7zXX9YpI1t1gNaKszXzauoOA4lcO0FXRJdm_nbLkmz8xxfNW7KHmP6xvdf4MV7J3aH76c45RHMEjBgbbdfTkE5tseuz8n4dzEkSnzhuwwh8ow0g-z7-qjNv609tDLajRB-5mrPiLuA")
-        kkk.put("owner", true)
-        Timber.e(kkk.toString())
-        myDb.add(kkk, myDb.writableDatabase, "users")
-        myDb.change(user)
-
-        lin1!!.setVisibility(View.GONE)
-        mRecyclerView!!.setVisibility(View.VISIBLE)
-        fragmentManager!!.beginTransaction().detach(this).attach(this).commit()
     }
 
     private fun getRedirectUri(): Uri {
@@ -311,13 +303,5 @@ class Home : Fragment() {
                 .scheme(getString(R.string.com_spotify_sdk_redirect_scheme))
                 .authority(getString(R.string.com_spotify_sdk_redirect_host))
                 .build()
-    }
-
-    fun share() {
-        val transaction = activity!!.supportFragmentManager.beginTransaction()
-        transaction.add(R.id.myNavHostFragment, Users(), "tag")
-//        supportActionBar?.title = "Share"
-        transaction.addToBackStack(null)
-        transaction.commit()
     }
 }

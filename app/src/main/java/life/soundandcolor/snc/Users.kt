@@ -1,6 +1,5 @@
 package life.soundandcolor.snc
 
-import android.content.Intent
 import android.database.Cursor
 import android.os.AsyncTask
 import android.os.Bundle
@@ -10,16 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
-import kotlinx.android.synthetic.main.item.view.*
-import kotlinx.android.synthetic.main.user_item.view.*
 import life.soundandcolor.snc.databinding.UsersBinding
 import life.soundandcolor.snc.utilities.DatabaseHelper
-import life.soundandcolor.snc.utilities.Helper
 import life.soundandcolor.snc.utilities.NetworkUtils
+import life.soundandcolor.snc.utilities.NetworkUtils.getFriendObjects
+import org.json.JSONArray
+import org.json.JSONObject
 import timber.log.Timber
 
 import java.util.ArrayList
@@ -27,9 +24,54 @@ import java.util.ArrayList
 class Users : Fragment() {
 
     lateinit internal var res: Cursor
+    lateinit internal var js: JSONArray
     lateinit internal var myDb: DatabaseHelper
     lateinit internal var binding: UsersBinding
     lateinit internal var adapter: UsersAdapter
+    lateinit internal var owner: String
+    lateinit internal var names: ArrayList<String>
+    lateinit internal var usernames: ArrayList<String>
+    lateinit internal var listItems: ArrayList<String>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        myDb = DatabaseHelper(context)
+        res = myDb.check()
+        res.moveToNext()
+
+        owner = res.getString(0)
+        val owner_name = res.getString(1)
+
+        names = ArrayList<String>()
+        usernames = ArrayList<String>()
+        listItems = ArrayList<String>()
+        names.add(owner_name)
+        usernames.add(owner)
+        listItems.add("")
+
+        js = getFriendObjects(owner)
+        for (i in 0 until js.length()) {
+            val temp = js.getJSONObject(i)
+
+            val kkk = JSONObject()
+            kkk.put("username", temp.getString("id"))
+            kkk.put("name", temp.getString("display_name"))
+            val images = temp.getJSONArray("images")
+            if (images!=null && images.length() > 0)
+                kkk.put("img", images.getJSONObject(0).getString("url"))
+            kkk.put("email", temp.getString("email"))
+            myDb.add(kkk, myDb.writableDatabase, "users")
+
+            names.add(temp.getString("display_name"))
+            usernames.add(temp.getString("id"))
+            listItems.add("")
+        }
+//        while (res.moveToNext()) {
+//            names.add(res.getString(0))
+//            trending.add("")
+//        }
+//        Fetch().execute()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -37,17 +79,6 @@ class Users : Fragment() {
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.users, container, false)
 
-        myDb = DatabaseHelper(context)
-
-        var listItems1 = ArrayList<String>()
-        var listItems2 = ArrayList<String>()
-        res = Helper.getFriends(myDb)
-        while (res.moveToNext()) {
-            listItems1.add(res.getString(0))
-            listItems2.add("")
-        }
-
-        Fetch().execute()
         binding.add.setOnClickListener {
 
             binding.input.visibility = View.VISIBLE
@@ -59,6 +90,7 @@ class Users : Fragment() {
 //            binding.response.text = "Request sent."
 //            binding.response.visibility = View.VISIBLE
             if (true) {//valid username:
+                NetworkUtils.getRequest("add-friend", listOf("username" to owner, "friend" to binding.inputText.text.toString()))
                 binding.inputText.setText("")
                 binding.input.visibility = View.GONE
                 Toast.makeText(context, "Request sent", Toast.LENGTH_LONG).show()
@@ -67,14 +99,15 @@ class Users : Fragment() {
                 Toast.makeText(context, "Invalid username", Toast.LENGTH_SHORT).show()
         }
 
-        adapter = UsersAdapter(context!!, listItems1, listItems2, tag)
+        adapter = UsersAdapter(context!!, names, listItems, tag)
         binding.list.setAdapter(adapter)
 
         binding.list.setOnItemClickListener { parent, view, position, id ->
-            val user = listItems1[position]
-            Toast.makeText(context, "$user selected", Toast.LENGTH_SHORT).show()
+            val name = names[position]
+            val username = usernames[position]
+            Toast.makeText(context, "$name selected", Toast.LENGTH_SHORT).show()
             
-            myDb.change(user)
+            myDb.change(username)
             parent.findNavController().navigate(UsersDirections.actionUsersToHome())
         }
         return binding.root
@@ -82,9 +115,6 @@ class Users : Fragment() {
 
     inner class Fetch : AsyncTask<String, Void, Array<String>>() {
 
-        var url = "https://api.spotify.com/v1/me/player/currently-playing"
-
-        var listItems1 = ArrayList<String>()
         var listItems2 = ArrayList<String>()
 
         override fun onPreExecute() {
@@ -92,30 +122,42 @@ class Users : Fragment() {
         }
 
         override fun doInBackground(vararg params: String): Array<String>? {
-            res = myDb.get2("users")
-            while (res.moveToNext()) {
-                Timber.e(res.getString(0))
-                var result = NetworkUtils.getRequest(url, null, res.getString(1), res.getString(2), myDb)
-                if (result != null) {
-                    var json = result.getJSONObject("item")
+//            res = myDb.get("users")
+//            while (res.moveToNext()) {
+//                Timber.e(res.getString(0))
+//                names.add(res.getString(0))
 
-                    listItems1.add(res.getString(0))
+//                var result = NetworkUtils.getRequest("https://api.spotify.com/v1/me/player/currently-playing",
+//                        null, res.getString(1), res.getString(2), myDb)
+//                if (result != null) {
+//                    var json = result.getJSONObject("item")
+//
+//                    trending.add(json.getString("name") + "  •  " +
+//                            json.getJSONArray("artists").getJSONObject(0).getString("name") + "  •  " +
+//                            json.getJSONObject("album").getString("name"))
+//                } else
+//                    trending.add("")
+//            }
+            for (i in usernames) {
+                val result = NetworkUtils.getRequest("currently-playing",
+                        listOf("username" to i))
+                if (!result.equals("ok")) {
+                    Timber.e(i+result.toString())
+
+                    var json = JSONObject(result).getJSONObject("item")
                     listItems2.add(json.getString("name") + "  •  " +
                             json.getJSONArray("artists").getJSONObject(0).getString("name") + "  •  " +
                             json.getJSONObject("album").getString("name"))
-                } else {
-                    listItems1.add(res.getString(0))
+                }  else
                     listItems2.add("")
-                }
             }
             return null
         }
 
         override fun onPostExecute(data: Array<String>?) {
-//            adapter = UsersAdapter(context!!, listItems1, listItems2)
+//            adapter = UsersAdapter(context!!, names, trending)
 //            adapter.notifyDataSetChanged()
-            adapter.setData(listItems1, listItems2)
-
+            adapter.setData(names, listItems2)
         }
     }
 }

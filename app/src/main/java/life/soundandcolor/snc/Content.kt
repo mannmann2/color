@@ -31,14 +31,14 @@ class Content : Fragment() {
     private var mErrorMessageDisplay: TextView? = null
     private var mLoadingIndicator: ProgressBar? = null
     var loadMore: Boolean = false
-//    private var jsonResponse: String? = null
     private var simpleData: Array<String>? = null
     private var id: String? = null
     private var extra: String? = null
     private var filter: String? = null
     private  var base: String? = null
     lateinit internal var title: String
-    lateinit internal var user: String
+    lateinit internal var username: String
+    lateinit internal var name: String
     lateinit internal var url: String
     lateinit internal var params: List<Pair<String, String>>
     lateinit internal var myDb: DatabaseHelper
@@ -60,9 +60,10 @@ class Content : Fragment() {
         filter = args.filter
 
         myDb = DatabaseHelper(context)
-        res = myDb.get()
+        res = myDb.get_current()
         res.moveToFirst()
-        user = res.getString(0)
+        username = res.getString(0)
+        name = res.getString(1)
 
         mRecyclerView = binding.recyclerviewForecast
         mErrorMessageDisplay = binding.errorMessageDisplay
@@ -70,28 +71,46 @@ class Content : Fragment() {
         val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mRecyclerView!!.setLayoutManager(layoutManager)
 
-        contentAdapter = ContentAdapter(id!!, res.getString(0))
+        contentAdapter = ContentAdapter(id!!, username)
         mRecyclerView!!.adapter = contentAdapter
 
         if (!filter.equals("0")) { // woah calm down bro this should not be here
-            val arr = JSONArray()
-            val res2 = myDb.get2("following", "where user = '$user'")
-            var i = 0
-            while (res2.moveToNext()) {
-                val genres = res2.getString(7)
-                if (genres.contains("\""+filter!!+"\"")) {
-                    val temp = JSONObject()
-                    temp.put("name", res2.getString(1))
-                    temp.put("url", res2.getString(3))
-                    temp.put("pop", res2.getString(6))
-                    temp.put("img", res2.getString(4))
-                    temp.put("type", res2.getString(5))
-                    Timber.e(temp.toString())
-                    arr.put(i, temp)
-                    i += 1
-                }
-            }
 
+            var i = 0
+            val arr = JSONArray()
+            val artists = JSONArray(NetworkUtils.getRequest("genre-artists",
+                    listOf("genre" to filter!!, "username" to username)))
+            for (j in 0 until artists.length()) {
+                val temp = JSONObject()
+                val res2 = artists.getJSONObject(j)
+                temp.put("name", res2.getString("name"))
+                temp.put("url", res2.getJSONObject("external_urls").getString("spotify"))
+                temp.put("pop", res2.getString("popularity"))
+                if (res2.getJSONArray("images").length() > 0)
+                    temp.put("img", res2.getJSONArray("images")
+                            .getJSONObject(0).getString("url"))
+                else
+                    temp.put("img", "")
+                temp.put("type", "artist")
+                arr.put(i, temp)
+                i += 1
+            }
+//            val res2 = myDb.get("following", "where username = '$username'")
+//            while (res2.moveToNext()) {
+//                val genres = res2.getString(7)
+//                if (genres.contains("\""+filter!!+"\"")) {
+//                    val temp = JSONObject()
+//                    temp.put("name", res2.getString(1))
+//                    temp.put("url", res2.getString(3))
+//                    temp.put("pop", res2.getString(6))
+//                    temp.put("img", res2.getString(4))
+//                    temp.put("type", res2.getString(5))
+//                    Timber.e(temp.toString())
+//                    arr.put(i, temp)
+//                    i += 1
+//                }
+//            }
+            //
             val data = Array<String>(arr!!.length()) { arr.optString(it) }
             /*
              * Use this setting to improve performance if you know that changes in content do not
@@ -185,31 +204,58 @@ class Content : Fragment() {
             if (para.size == 0) {
                 return null
             }
-
-            val token = res.getString(1)
-            val refresh = res.getString(2)
-            Timber.e("User " + user)
+            //
+//            val token = res.getString(1)
+//            val refresh = res.getString(2)
+//            Timber.e("User " + username)
+//
+//            if (extra == "following") {
+//                url = BASE_URL2
+//                params = listOf(AFTER_PARAM to after!!, LIMIT_PARAM to Integer.toString(limit))
+//            }
+//            else if (extra == "recent") {
+//                url = BASE_URL3
+//                params = listOf(LIMIT_PARAM to Integer.toString(limit))
+//
+////                if (before != null) {
+////                    builtUri = temp.appendQueryParameter(BEFORE_PARAM, before).build()
+////                    before = null
+////                }
+////                else {
+////                    builtUri = temp.build()
+////                }
+//            }
+//            else if ((extra == "tracks") || (extra == "albums")) {
+//                url = BASE_URL + extra
+//                params = listOf(OFFSET_PARAM to Integer.toString(offset), LIMIT_PARAM to Integer.toString(limit))
+//            }
+//            else {
+//                if (id!! == "Top Artists")
+//                    base = "artists"
+//                else
+//                    base = "tracks"
+//
+//                url = BASE_URL+"top/"+base
+//                params = listOf(TIME_PARAM to extra!!, LIMIT_PARAM to Integer.toString(limit1),
+//                        OFFSET_PARAM to Integer.toString(offset))
+//            }
+            Timber.e("User " + username)
 
             if (extra == "following") {
-                url = BASE_URL2
-                params = listOf(AFTER_PARAM to after!!, LIMIT_PARAM to Integer.toString(limit))
-//                params = listOf(AFTER_PARAM to after!!, "token" to token, "username" to user)
+                url = "following"
+                params = listOf(AFTER_PARAM to after!!, "username" to username)
             }
             else if (extra == "recent") {
-                url = BASE_URL3
-                params = listOf(LIMIT_PARAM to Integer.toString(limit))
-
-//                if (before != null) {
-//                    builtUri = temp.appendQueryParameter(BEFORE_PARAM, before).build()
-//                    before = null
-//                }
-//                else {
-//                    builtUri = temp.build()
-//                }
+                url = "recently-played"
+                params = listOf("username" to username)
             }
-            else if ((extra == "tracks") || (extra == "albums")) {
-                url = BASE_URL + extra
-                params = listOf(OFFSET_PARAM to Integer.toString(offset), LIMIT_PARAM to Integer.toString(limit))
+            else if (extra == "albums") {
+                url = "saved-albums"
+                params = listOf(OFFSET_PARAM to Integer.toString(offset), "username" to username)
+            }
+            else if (extra == "tracks") {
+                url = "saved-tracks"
+                params = listOf(OFFSET_PARAM to Integer.toString(offset), "username" to username)
             }
             else {
                 if (id!! == "Top Artists")
@@ -217,19 +263,20 @@ class Content : Fragment() {
                 else
                     base = "tracks"
 
-                url = BASE_URL+"top/"+base
-                params = listOf(TIME_PARAM to extra!!, LIMIT_PARAM to Integer.toString(limit1),
-                        OFFSET_PARAM to Integer.toString(offset))
+                url = "top-" + base
+                params = listOf("time" to extra!!, LIMIT_PARAM to Integer.toString(limit1),
+                        OFFSET_PARAM to Integer.toString(offset), "username" to username)
             }
 
             try {
-                val jsonResponse = NetworkUtils.getRequest(url, params, token, refresh, myDb)
-                var arr = ParseUtils.getSimpleStringsFromJson(context!!, jsonResponse!!, id!!, user)!!
+//                val jsonResponse = NetworkUtils.getRequest(url, params, token, refresh, myDb)
+                val jsonResponse = JSONObject(NetworkUtils.getRequest(url, params))
+                var arr = ParseUtils.getSimpleStringsFromJson(context!!, jsonResponse, id!!, username, name)!!
 //                if (extra == "recent") {
 //                    arr = JSONArray()
-//                    val rec = myDb.get2("feed")
+//                    val rec = myDb.get("feed")
 //                    while (rec.moveToNext()) {
-//                        if (rec.getString(0) == user) {
+//                        if (rec.getString(0) == username) {
 //                            var temp = JSONObject()
 //                            for (j in 0..9)
 //                                temp.put(rec.getColumnName(j), rec.getString(j))
@@ -305,8 +352,7 @@ class Content : Fragment() {
 //    }
 
     companion object {
-        private var IP = "http://13.233.83.58:5000"
-        private val limit = 50
+//        private val limit = 50
         private var limit1 = 49
         private var offset = 0
         private var after: String? = null
@@ -316,11 +362,11 @@ class Content : Fragment() {
         internal val OFFSET_PARAM = "offset"
         internal val AFTER_PARAM = "after"
 //        internal val BEFORE_PARAM = "before"
-        internal val TIME_PARAM = "time_range"
+//        internal val TIME_PARAM = "time_range"
 
-        private val BASE_URL = "https://api.spotify.com/v1/me/"
-        private val BASE_URL2 = "https://api.spotify.com/v1/me/following?type=artist"
+//        private val BASE_URL = "https://api.spotify.com/v1/me/"
+//        private val BASE_URL2 = "https://api.spotify.com/v1/me/following?type=artist"
 //        private val BASE_URL2 = IP + "/api/v1/following"
-        private val BASE_URL3 = "https://api.spotify.com/v1/me/player/recently-played"
+//        private val BASE_URL3 = "https://api.spotify.com/v1/me/player/recently-played"
     }
 }

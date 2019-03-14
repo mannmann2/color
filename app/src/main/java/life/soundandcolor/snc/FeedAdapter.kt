@@ -6,18 +6,17 @@ import android.widget.*
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import life.soundandcolor.snc.utilities.DatabaseHelper
 import life.soundandcolor.snc.utilities.Helper
 import org.json.JSONException
 import org.json.JSONObject
+import timber.log.Timber
 
 
 import java.util.*
 
-class FeedAdapter(token: String, val itemClick: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FeedAdapter(val itemClick: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var mData: ArrayList<JSONObject?>? = null
-    val token = token
     lateinit private var context: Context
     lateinit private var vg: ViewGroup
 
@@ -39,7 +38,6 @@ class FeedAdapter(token: String, val itemClick: (Int) -> Unit) : RecyclerView.Ad
         val send: ImageView
 
         init {
-//            relLay =
             mImgView = view.findViewById(R.id.feed_item_img)
             mTextView = view.findViewById(R.id.feed_user)
             mTextView2 = view.findViewById(R.id.feed_item_data)
@@ -116,11 +114,13 @@ class FeedAdapter(token: String, val itemClick: (Int) -> Unit) : RecyclerView.Ad
                             .error(R.drawable.ic_launcher_background)
                             .resize(512, 512).into(holder.mImgView)
 
-                holder.mTextView.text = js.getString("user")
+                holder.mTextView.text = js.getString("display_name")
+                Timber.e(js.getString("display_name"))
                 holder.mTextView2.text = js.getString("name")
                 holder.mTextView3.text = js.getString("album")
                 holder.mTextView4.text = js.getString("artist")
-                holder.mTextView5.text = Helper.display_time(js.getString("timestamp"))
+                Timber.e(js.getString("timestamp"))
+                holder.mTextView5.text = Helper.displayTime(js.getString("timestamp"))
 
                 holder.relLay.tag = js.getString("url")
                 holder.analysis.tag = js.getString("id")
