@@ -3,75 +3,38 @@ package life.soundandcolor.snc
 import android.database.Cursor
 import android.os.Bundle
 import android.os.StrictMode
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.View.OnTouchListener
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import life.soundandcolor.snc.databinding.ProfileBinding
 import life.soundandcolor.snc.utilities.DatabaseHelper
 import life.soundandcolor.snc.utilities.NetworkUtils
 import org.json.JSONArray
-import java.util.ArrayList
-import android.view.MotionEvent
-import android.view.View.OnTouchListener
+import java.util.*
 
 
 class Profile : Fragment() {
 
     lateinit internal var myDb: DatabaseHelper
     lateinit internal var res: Cursor
-    lateinit internal var res2: Cursor
-    lateinit internal var trending: ArrayList<String>
-    lateinit internal var trending2: ArrayList<String>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        myDb = DatabaseHelper(context)
-        res = myDb.get_current()
-        res.moveToFirst()
-        res2 = myDb.check()
-        res2.moveToFirst()
-
-        val owner = res2.getString(0)
-        if (res.getString(0).equals(res2.getString(0))) {
-
-
-            val js = JSONArray(NetworkUtils.getRequest("trending", listOf("username" to owner)))
-
-            trending = ArrayList<String>()
-            val js1 = js.getJSONArray(0)
-
-            for (i in 0 until js1.length()) {
-                var js3 = js1.getJSONObject(i)
-                var count = js3.getString("doc_count")
-                if (count.toInt() > 2)
-                    trending.add(js3.getString("key") + "  •  " + count)
-            }
-
-            trending2 = ArrayList<String>()
-            val js2 = js.getJSONArray(1)
-
-            for (i in 0 until js2.length()) {
-                var js4 = js2.getJSONObject(i)
-                var count = js4.getString("doc_count")
-                if (count.toInt() > 2)
-                    trending2.add(js4.getString("key") + "  •  " + count)
-            }
-        }
-    }
+    lateinit internal var owner: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        StrictMode.enableDefaults()
         val binding: ProfileBinding = DataBindingUtil.inflate(
                 inflater, R.layout.profile, container, false)
 
-        // reinitialized bcuz on going back you still want the selected username to be shown and not an older username
+        // reinitialized bcuz on going back you still want the last selected username to be shown and not an older username
+        myDb = DatabaseHelper(context)
         res = myDb.get_current()
-        res.moveToFirst()
+        owner = myDb.get_owner().getString(0)
 
         binding.userId.setText(res.getString(1))
 
@@ -121,7 +84,6 @@ class Profile : Fragment() {
         }
 
 
-
 //        binding.gg.setOnClickListener { v: View ->
 //            with(NotificationManagerCompat.type(context!!)) {
 //                val nn = RealNotifications(context!!)
@@ -144,31 +106,12 @@ class Profile : Fragment() {
 //            activity!!.startService(serviceIntent)
 //            Timber.e("hellpo")
 //        }
-        if (res.getString(0).equals(res2.getString(0))) {
-            binding.trending.visibility = View.VISIBLE
-            binding.trending2.visibility = View.VISIBLE
+        if (res.getString(0).equals(owner)) {
 
-            val adapter2 = ArrayAdapter<String>(context, R.layout.simple_no_elevation, trending2)
-            binding.list2.setAdapter(adapter2)
-
-            val adapter = ArrayAdapter<String>(context, R.layout.simple_no_elevation, trending)
-            binding.list.setAdapter(adapter)
-
-            binding.list.setOnTouchListener(object : OnTouchListener {
-                // Setting on Touch Listener for handling the touch inside ScrollView
-                override fun onTouch(v: View, event: MotionEvent): Boolean {
-                    // Disallow the touch request for parent scroll on touch of child view
-                    v.parent.requestDisallowInterceptTouchEvent(true)
-                    return false
-                }
-            })
-
-            binding.list2.setOnTouchListener(object : OnTouchListener {
-                override fun onTouch(v: View, event: MotionEvent): Boolean {
-                    v.parent.requestDisallowInterceptTouchEvent(true)
-                    return false
-                }
-            })
+            binding.stats.setOnClickListener { v: View ->
+                v.findNavController().navigate(ProfileDirections.actionProfileToStatsNav())
+            }
+            binding.stats.visibility = View.VISIBLE
         }
 //        (activity as AppCompatActivity).supportActionBar?.title = "Sound & Color"
         (activity as AppCompatActivity).supportActionBar!!.isHideOnContentScrollEnabled = false

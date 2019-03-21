@@ -5,7 +5,7 @@
     android:layout_height="64dp"
     android:background="@drawable/selector"
     android:clickable="true"
-    android:longClickable="true"
+    android:focusable="true" android:longClickable="true"
     android:orientation="horizontal"
     android:paddingVertical="@dimen/vertical_padding"
     android:paddingEnd="@dimen/horizontal_padding" >

@@ -17,7 +17,7 @@
         app:layout_anchor="@id/bar"
         app:pressedTranslationZ="20dp"
         app:rippleColor="@color/black"
-        app:srcCompat="@drawable/ic_home_white" />
+        app:srcCompat="@drawable/ic_home_black" />
 
     <!--<androidx.appcompat.view.menu.ActionMenuItemView-->
     <!--android:layout_width="wrap_content"-->

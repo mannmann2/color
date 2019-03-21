@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/stats"
+        android:icon="@drawable/ic_spa_black"
+        android:title="Personal"/>
+
+    <item
+        android:id="@+id/statsTracks"
+        android:icon="@drawable/ic_track_black"
+        android:title="Tracks"/>
+
+    <item
+        android:id="@+id/statsArtists"
+        android:icon="@drawable/ic_artists_black"
+        android:title="Artists"/>
+
+</menu>

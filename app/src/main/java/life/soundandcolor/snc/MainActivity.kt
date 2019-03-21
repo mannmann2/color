@@ -1,30 +1,18 @@
 package life.soundandcolor.snc
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
-import android.view.View
-import android.view.Window
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import com.spotify.sdk.android.authentication.AuthenticationClient
-import com.spotify.sdk.android.authentication.AuthenticationRequest
-import com.spotify.sdk.android.authentication.AuthenticationResponse
 import life.soundandcolor.snc.databinding.ActivityMainBinding
 import timber.log.Timber
-import java.util.*
+import androidx.fragment.app.Fragment
+import android.view.MenuItem
 
 class MainActivity : AppCompatActivity() {
 
@@ -102,6 +90,31 @@ class MainActivity : AppCompatActivity() {
         super.onRestart()
         Timber.i("onRestart")
     }
+
+//    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+//        var fragment: Fragment? = null
+//
+//        when (item!!.itemId) {
+//            R.id.stats -> fragment = Stats()
+//
+//            R.id.statsArtists -> fragment = StatsArtists()
+//
+//            R.id.statsTracks -> fragment = StatsTracks()
+//        }
+//
+//        return loadFragment(fragment)
+//    }
+//
+//    private fun loadFragment(fragment: Fragment?): Boolean {
+//        if (fragment != null) {
+//            supportFragmentManager
+//                    .beginTransaction()
+//                    .replace(R.id.fragment_container, fragment!!)
+//                    .commit()
+//            return true
+//        }
+//        return false
+//    }
 
     private fun handleSendText(intent: Intent) {
         intent.getStringExtra(Intent.EXTRA_TEXT)?.let {

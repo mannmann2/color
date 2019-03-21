@@ -1,6 +1,9 @@
 package life.soundandcolor.snc
 
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -28,7 +31,7 @@ class RealNotifications(
 
         createNotificationChannel()
 
-        var builder = NotificationCompat.Builder(context!!, "CHANNEL")
+        var builder = NotificationCompat.Builder(context, "CHANNEL")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("notifications")
                 .setContentText("text")

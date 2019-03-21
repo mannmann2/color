@@ -42,15 +42,21 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // android x
     implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation "android.arch.navigation:navigation-fragment-ktx:$navigationVersion"
-    implementation "android.arch.navigation:navigation-ui-ktx:$navigationVersion"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation "android.arch.lifecycle:viewmodel:1.1.1"
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+//    implementation "androidx.navigation:navigation-fragment:$navigationVersion"
+//    implementation "androidx.navigation:navigation-ui:$navigationVersion"
+    implementation "android.arch.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "android.arch.navigation:navigation-ui-ktx:$navigation_version"
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     // third party
     implementation 'com.spotify.android:auth:1.1.0'
+    implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'org.jsoup:jsoup:1.10.3'
     implementation 'com.github.kittinunf.fuel:fuel:2.0.0'

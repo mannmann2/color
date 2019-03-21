@@ -2,14 +2,13 @@ package life.soundandcolor.snc.utilities
 
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.view.View
 import org.json.JSONObject
 import org.jsoup.Jsoup
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 object Helper {
 
@@ -28,21 +27,30 @@ object Helper {
         val context = view.context
         val uri = Uri.parse(view.tag.toString())
         val intent = Intent(Intent.ACTION_VIEW, uri)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         context.startActivity(intent)
+
+//        val detailsIntent = Intent(this, DetailsActivity::class.java)
+
+//        val pendingIntent: PendingIntent? = TaskStackBuilder.create(context)
+//                .addNextIntentWithParentStack(intent)
+//                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+//
+//        pendingIntent!!.send()
+
+//
+//        val builder = NotificationCompat.Builder(context)
+//                .setContentIntent(pendingIntent)
     }
 
-    fun share(view: View, uri: String, user: CharSequence, song: CharSequence, artist: CharSequence) {
+    fun share(context: Context, shareBody: String, uri: String) {
         // log share of ABC type X by Y on Z maybe as a service?
-        var shareBody = "Here's a song played by " + user + "... " +
-                song + " by " + artist
-
-        shareBody += "\n" + uri + "\n\n- via Sound & Color"
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.setType("text/plain")
                 .putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
-                .putExtra(Intent.EXTRA_TEXT, shareBody)
+                .putExtra(Intent.EXTRA_TEXT, shareBody+"\n" + uri + "\n\n- via Sound & Color")
 
-        view.context.startActivity(Intent.createChooser(shareIntent, "Share..."))
+        context.startActivity(Intent.createChooser(shareIntent, "Share..."))
     }
 
     fun parseMessage(message: String): String {

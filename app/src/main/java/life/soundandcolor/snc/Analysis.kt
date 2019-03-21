@@ -3,12 +3,12 @@ package life.soundandcolor.snc
 import android.database.Cursor
 import android.os.Bundle
 import android.os.StrictMode
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import life.soundandcolor.snc.databinding.AnalysisBinding
 import life.soundandcolor.snc.utilities.DatabaseHelper
 import life.soundandcolor.snc.utilities.NetworkUtils
@@ -35,8 +35,7 @@ class Analysis : Fragment() {
         from = args.from
 
         myDb = DatabaseHelper(context)
-        res = myDb.check()
-        res.moveToFirst()
+        res = myDb.get_owner()
 
         val user = res.getString(0)
 //        val token = res.getString(1)

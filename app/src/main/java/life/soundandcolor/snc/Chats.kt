@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import life.soundandcolor.snc.databinding.ChatsBinding
 import life.soundandcolor.snc.utilities.DatabaseHelper
-import life.soundandcolor.snc.utilities.NetworkUtils.getFriendObjects
+import life.soundandcolor.snc.utilities.NetworkUtils.getFriends
 
 
 class Chats : Fragment() {
@@ -23,10 +23,9 @@ class Chats : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val myDb = DatabaseHelper(context)
-        val res = myDb.check()
-        res.moveToFirst()
+        val res = myDb.get_owner()
 
-        val js = getFriendObjects(res.getString(0))
+        val js = getFriends(res.getString(0))
         usernames = ArrayList<String>()
         names = ArrayList<String>()
         for (i in 0 until js.length()) {

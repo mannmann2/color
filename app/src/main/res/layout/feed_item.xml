@@ -5,7 +5,7 @@
     android:layout_height="228dp"
     android:background="@drawable/selector"
     android:clickable="true"
-    android:longClickable="true"
+    android:focusable="true" android:longClickable="true"
     android:orientation="horizontal"
     android:paddingEnd="@dimen/padding"  >
 
@@ -121,6 +121,7 @@
             android:src="@drawable/ic_add2_black"
             android:layout_toLeftOf="@id/feed_queue"
             android:paddingRight="@dimen/icon_padding"
+            android:visibility="gone"
             />
 
         <ImageView

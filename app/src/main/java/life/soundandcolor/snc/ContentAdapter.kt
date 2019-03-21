@@ -1,26 +1,23 @@
 package life.soundandcolor.snc
 
-import org.json.JSONException
-import org.json.JSONObject
-
-import android.content.Intent
 import android.view.*
 import android.widget.*
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-
 import com.squareup.picasso.Picasso
 import life.soundandcolor.snc.utilities.Helper
+import org.json.JSONException
+import org.json.JSONObject
 import timber.log.Timber
 
-class ContentAdapter(username: String, name: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ContentAdapter(id: String, name: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var mData: Array<String?>? = null
-    var username: String
+    var id: String
     var name: String
 
     init {
-        this.username = username
+        this.id = id
         this.name = name
     }
 
@@ -58,24 +55,19 @@ class ContentAdapter(username: String, name: String) : RecyclerView.Adapter<Recy
                             val uri = child.tag.toString()
                             var shareBody = ""
 
-                            when (username) {
+                            when (id) {
                                 "Following", "Top Artists" -> {
-                                    shareBody += "Here's an artist type " + name + "'s " + username + "... " + mTextView.text
+                                    shareBody += "Here's an artist from " + name + "'s " + id + "... " + mTextView.text
                                 }
                                 "Recent", "Top Tracks", "Saved Tracks" -> {
-                                    shareBody += "Here's a song type " + name + "'s " + username + "... " +
-                                            mTextView.text.split("\t\t/\t\t")[0] + " by " + mTextView2.text
+                                    shareBody += "Here's a song from " + name + "'s " + id + "... " +
+                                            mTextView.text.split("  •  ")[0] + " by " + mTextView2.text
                                 }
                                 "Saved Albums" -> {
-                                    shareBody += "Here's an album type " + name + "'s " + username + "... " + mTextView2.text
+                                    shareBody += "Here's an album from " + name + "'s " + id + "... " + mTextView2.text
                                 }
                             }
-                            shareBody += "\n" + uri + "\n\n- via Sound & Color"
-                            val shareIntent = Intent(Intent.ACTION_SEND)
-                            shareIntent.setType("text/plain")
-                                    .putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
-                                    .putExtra(Intent.EXTRA_TEXT, shareBody)
-                            context.startActivity(shareIntent)
+                            Helper.share(context, shareBody, uri)
                         }
 
                         R.id.Open -> {
@@ -166,7 +158,7 @@ class ContentAdapter(username: String, name: String) : RecyclerView.Adapter<Recy
                     holder.mTextView.text = js.getString("name") + "  •  " + js.get("album")
                     holder.mTextView2.text = js.getString("artist")
 
-                    if (username=="Recent") {
+                    if (id=="Recent") {
                         holder.mTextView.gravity = Gravity.TOP
                         holder.mTextView.setPadding(0,16,0,0)
                         holder.mTextView2.gravity = Gravity.TOP

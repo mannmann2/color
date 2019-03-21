@@ -29,8 +29,7 @@ class Chat : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.chat, container, false)
 
         val myDb = DatabaseHelper(context)
-        val res = myDb.check()
-        res.moveToNext()
+        val res = myDb.get_owner()
         val owner = res.getString(0)
 
         val listItems = ArrayList<String>()
@@ -45,12 +44,14 @@ class Chat : Fragment() {
         for (i in 0 until messages.length()) {
             val temp = messages.getJSONObject(i).getJSONObject("_source")
             listItems.add(temp.getString("message"))
-            if (temp.getString("type").equals(owner))
+            if (temp.getString("from").equals(owner))
                 align.add(1)
             else
                 align.add(0)
         }
 
+        listItems.reverse()
+        align.reverse()
 //        val adapter = ArrayAdapter<String>(context, R.layout.simple_no_elevation, trending)
         val adapter = ChatAdapter(context!!, listItems, align)
         binding.list.adapter = adapter

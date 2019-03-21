@@ -69,6 +69,9 @@
         <action
             android:id="@+id/action_Profile_to_genres"
             app:destination="@id/genres" />
+        <action
+            android:id="@+id/action_Profile_to_statsNav"
+            app:destination="@id/statsNav" />
     </fragment>
     <fragment
         android:id="@+id/Analysis"
@@ -143,4 +146,8 @@
             android:name="name"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/statsNav"
+        android:name="life.soundandcolor.snc.StatsNav"
+        android:label="StatsNav" />
 </navigation>

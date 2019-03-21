@@ -4,22 +4,21 @@ import android.database.Cursor
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.StrictMode
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import life.soundandcolor.snc.databinding.UsersBinding
 import life.soundandcolor.snc.utilities.DatabaseHelper
 import life.soundandcolor.snc.utilities.NetworkUtils
-import life.soundandcolor.snc.utilities.NetworkUtils.getFriendObjects
+import life.soundandcolor.snc.utilities.NetworkUtils.getFriends
 import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
-
-import java.util.ArrayList
+import java.util.*
 
 class Users : Fragment() {
 
@@ -36,8 +35,7 @@ class Users : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         myDb = DatabaseHelper(context)
-        res = myDb.check()
-        res.moveToNext()
+        res = myDb.get_owner()
 
         owner = res.getString(0)
         val owner_name = res.getString(1)
@@ -49,7 +47,7 @@ class Users : Fragment() {
         usernames.add(owner)
         listItems.add("")
 
-        js = getFriendObjects(owner)
+        js = getFriends(owner)
         for (i in 0 until js.length()) {
             val temp = js.getJSONObject(i)
 
@@ -89,8 +87,9 @@ class Users : Fragment() {
         binding.send.setOnClickListener {
 //            binding.response.text = "Request sent."
 //            binding.response.visibility = View.VISIBLE
-            if (true) {//valid username:
-                NetworkUtils.getRequest("add-friend", listOf("username" to owner, "friend" to binding.inputText.text.toString()))
+            val friend = binding.inputText.text.toString()
+            if (NetworkUtils.getRequest("user", listOf("username" to friend)).equals("1")) {
+                NetworkUtils.getRequest("add-friend", listOf("username" to owner, "friend" to friend))
                 binding.inputText.setText("")
                 binding.input.visibility = View.GONE
                 Toast.makeText(context, "Request sent", Toast.LENGTH_LONG).show()

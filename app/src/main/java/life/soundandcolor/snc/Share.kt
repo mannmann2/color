@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment
 import life.soundandcolor.snc.databinding.ShareBinding
 import life.soundandcolor.snc.utilities.DatabaseHelper
 import life.soundandcolor.snc.utilities.NetworkUtils
-import life.soundandcolor.snc.utilities.NetworkUtils.getFriendObjects
-import java.util.ArrayList
+import life.soundandcolor.snc.utilities.NetworkUtils.getFriends
+import java.util.*
 
 class Share: Fragment() {
 
@@ -35,10 +35,10 @@ class Share: Fragment() {
                 inflater, R.layout.share, container, false)
 
         myDb = DatabaseHelper(context)
-        res = myDb.check()
+        res = myDb.get_owner()
         res.moveToNext()
         val owner = res.getString(0)
-        val js = getFriendObjects(owner)
+        val js = getFriends(owner)
 
         var names = ArrayList<String>()
         var usernames = ArrayList<String>()

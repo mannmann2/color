@@ -10,7 +10,7 @@ import org.json.JSONObject
 object ParseUtils {
 
     @Throws(JSONException::class)
-    fun getSimpleStringsFromJson(context: Context, json: JSONObject, id: String, user: String, name: String): JSONArray? {
+    fun getSimpleStringsFromJson(context: Context, json: JSONObject, id: String, user:String?, name: String?): JSONArray? {
 
         val myDb = DatabaseHelper(context)
 
@@ -62,9 +62,9 @@ object ParseUtils {
                     temp.put("type", "artist")
                     parsedData.put(i, temp)
 
-                    temp.put("username", user)
-                    temp.put("display_name", name)
-                    myDb.add(temp, myDb.writableDatabase, "following")
+//                    temp.put("username", user)
+//                    temp.put("display_name", name)
+//                    myDb.add(temp, myDb.writableDatabase, "following")
                 }
                 return parsedData
             }
@@ -94,6 +94,15 @@ object ParseUtils {
                 return parsedData
             }
             "Recent" -> {
+                var map = JSONObject()
+                if (user!=null)
+                    map.put(user, name)
+                else {
+                    val res = myDb.get_owner()
+                    val username = res.getString(0)
+                    map = NetworkUtils.getFriendNames(username)
+                    map.put(username, res.getString(1))
+                }
                 val weatherArray = json.getJSONArray("items")
                 for (i in 0 until weatherArray.length()) {
 
@@ -118,8 +127,9 @@ object ParseUtils {
                     temp.put("type", "track")
                     parsedData.put(i, temp)
 
-                    temp.put("username", user)
-                    temp.put("display_name", name)
+                    val display_username = dayForecast.getString("played_by")
+                    temp.put("username", display_username)
+                    temp.put("display_name", map.getString(display_username))
                     myDb.add(temp, myDb.writableDatabase, "feed")
                 }
                 return parsedData

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/bottom_navigation"
+    app:startDestination="@id/stats">
+
+    <fragment
+        android:id="@+id/stats"
+        android:name="life.soundandcolor.snc.Stats"
+        android:label="Stats" >
+    </fragment>
+    <fragment
+        android:id="@+id/statsTracks"
+        android:name="life.soundandcolor.snc.StatsTracks"
+        android:label="StatsTracks" />
+    <fragment
+        android:id="@+id/statsArtists"
+        android:name="life.soundandcolor.snc.StatsArtists"
+        android:label="StatsArtists" />
+</navigation>

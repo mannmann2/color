@@ -10,6 +10,10 @@
         android:icon="@drawable/ic_people_white"
         android:title="Profile" />
     <item
+        android:id="@+id/statsNav"
+        android:icon="@drawable/ic_spa_black"
+        android:title="Stats" />
+    <item
         android:id="@+id/chats"
         android:icon="@drawable/ic_chat_black"
         android:title="Chats" />

@@ -1,8 +1,14 @@
 package life.soundandcolor.snc
 
+
 import android.content.Context
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -10,8 +16,6 @@ import life.soundandcolor.snc.utilities.Helper
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
-
-
 import java.util.*
 
 class FeedAdapter(val itemClick: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -63,7 +67,9 @@ class FeedAdapter(val itemClick: (Int) -> Unit) : RecyclerView.Adapter<RecyclerV
             }
 
             share.setOnClickListener{
-                Helper.share(view, relLay.tag.toString(), mTextView.text, mTextView2.text, mTextView3.text)
+                var shareBody = "Here's a song played by " + mTextView.text + "... " +
+                        mTextView2.text + " by " + mTextView3.text
+                Helper.share(view.context, shareBody, relLay.tag.toString())
             }
 
             like.setOnClickListener {
@@ -114,12 +120,10 @@ class FeedAdapter(val itemClick: (Int) -> Unit) : RecyclerView.Adapter<RecyclerV
                             .error(R.drawable.ic_launcher_background)
                             .resize(512, 512).into(holder.mImgView)
 
-                holder.mTextView.text = js.getString("display_name")
-                Timber.e(js.getString("display_name"))
+                holder.mTextView.text =  js.getString("display_name")
                 holder.mTextView2.text = js.getString("name")
                 holder.mTextView3.text = js.getString("album")
                 holder.mTextView4.text = js.getString("artist")
-                Timber.e(js.getString("timestamp"))
                 holder.mTextView5.text = Helper.displayTime(js.getString("timestamp"))
 
                 holder.relLay.tag = js.getString("url")

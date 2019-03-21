@@ -7,7 +7,9 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.os.StrictMode
 import android.view.*
-import android.widget.*
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -25,8 +27,8 @@ import life.soundandcolor.snc.databinding.HomeBinding
 import life.soundandcolor.snc.utilities.DatabaseHelper
 import life.soundandcolor.snc.utilities.NetworkUtils
 import life.soundandcolor.snc.utilities.ParseUtils
-import org.json.JSONObject
 import org.json.JSONException
+import org.json.JSONObject
 import timber.log.Timber
 import java.util.Collections
 import kotlin.collections.ArrayList
@@ -47,6 +49,9 @@ class Home : Fragment() {
     var loadMore: Boolean = false
     lateinit internal var myDb: DatabaseHelper
     lateinit internal var res: Cursor
+    lateinit internal var feed: Cursor
+    lateinit internal var username: String
+    lateinit internal var name: String
     private var login: LinearLayout? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -59,9 +64,12 @@ class Home : Fragment() {
 
         login = binding.login
         mRecyclerView = binding.recyclerview2
-        if (myDb.check().count == 1) {
+        res = myDb.get_owner()
+        if (res.count == 1) {
             login!!.setVisibility(View.GONE)
             mRecyclerView!!.setVisibility(View.VISIBLE)
+            username = res.getString(0)
+            name = res.getString(1)
         }
         else {
             login!!.setVisibility(View.VISIBLE)
@@ -130,14 +138,13 @@ class Home : Fragment() {
         return true
     }
 
-
     fun get_feed(): ArrayList<JSONObject> {
         var data = ArrayList<JSONObject>()
-        res = myDb.get("feed")
-        while (res.moveToNext()) {
+        feed = myDb.get("feed")
+        while (feed.moveToNext()) {
             val temp = JSONObject()
             for (i in 0..10)
-                temp.put(res.getColumnName(i), res.getString(i))
+                temp.put(feed.getColumnName(i), feed.getString(i))
             data.add(temp)
         }
 
@@ -178,24 +185,28 @@ class Home : Fragment() {
 //        val refresh = refresh
 
         override fun doInBackground(vararg params: String): Array<String>? {
-            res = myDb.get("users")
-            while (res.moveToNext()) {
 
-                val user = res.getString(0)
-//                val token = res.getString(1)
-//                val refresh = res.getString(2)
-                Timber.e("User " + user)
+            val jsonResponse = JSONObject(NetworkUtils.getRequest("feed", listOf("username" to username)))
+            ParseUtils.getSimpleStringsFromJson(context!!, jsonResponse, "Recent", null, null)
 
-                try {
-//                    val jsonResponse = NetworkUtils.getRequest("https://api.spotify.com/v1/me/player/recently-played",
-//                            listOf("limit" to Integer.toString(limit)), token, refresh, myDb)
-                    val jsonResponse = JSONObject(NetworkUtils.getRequest("recently-played",
-                            listOf("username" to user)))
-                    ParseUtils.getSimpleStringsFromJson(context!!, jsonResponse, "Recent", user, res.getString(1))
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
+//            res = myDb.get("users")
+//            while (res.moveToNext()) {
+//
+//                val user = res.getString(0)
+////                val token = res.getString(1)
+////                val refresh = res.getString(2)
+//                Timber.e("User " + user)
+//
+//                try {
+////                    val jsonResponse = NetworkUtils.getRequest2("https://api.spotify.com/v1/me/player/recently-played",
+////                            listOf("limit" to Integer.toString(limit)), token, refresh, myDb)
+//                    val jsonResponse = JSONObject(NetworkUtils.getRequest("recently-played",
+//                            listOf("username" to user)))
+//                    ParseUtils.getSimpleStringsFromJson(context!!, jsonResponse, "Recent", username, res.getString(1))
+//                } catch (e: Exception) {
+//                    e.printStackTrace()
+//                }
+//            }
             return null
         }
 

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="life.soundandcolor.snc.Stats"
+    android:paddingTop="?attr/actionBarSize"
+    android:background="@color/colorPrimary">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="4dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/stats"
+            android:paddingTop="@dimen/padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:text="Play Counts"
+            android:textAlignment="center"
+            />
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/graph"
+            />
+
+        <TextView
+            android:id="@+id/artists"
+            android:paddingTop="@dimen/padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:text="Top artists"
+            android:textAlignment="center"/>
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="420dp" />
+
+        <TextView
+            android:id="@+id/tracks"
+            android:paddingTop="@dimen/padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:text="Top tracks"
+            android:textAlignment="center" />
+
+        <ListView
+            android:id="@+id/list2"
+            android:layout_width="match_parent"
+            android:layout_height="420dp" />
+    </LinearLayout>
+</ScrollView>
+</layout>

@@ -11,9 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/horizontal_margin"
-                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_marginVertical="@dimen/vertical_margin"
                 android:background="@drawable/round_corners"
                 android:elevation="@dimen/elevation"
                 android:gravity="center"
@@ -100,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/text_padding"
-                android:paddingTop="@dimen/vertical_padding"
+                android:paddingTop="@dimen/padding"
                 android:text="Top Artists:"
                 android:textSize="@dimen/text_size2"
                 android:textColor="@color/text_color_primary" />
@@ -141,7 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/text_padding"
-                android:paddingTop="@dimen/vertical_padding"
+                android:paddingTop="@dimen/padding"
                 android:text="Top Tracks:"
                 android:textSize="@dimen/text_size2"
                 android:textColor="@color/text_color_primary" />
@@ -192,40 +189,17 @@
                 <!--android:layout_margin="@dimen/margin"-->
                 <!--android:tag="short_term"-->
                 <!--android:text="Run" />-->
-            <TextView
-                android:id="@+id/trending"
-                android:paddingTop="@dimen/padding"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Large"
-                android:text="Trending today"
-                android:textAlignment="center"
-                android:visibility="gone"
-                />
-            <ListView
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="420dp"
-                />
-
-            <TextView
-                android:id="@+id/trending2"
-                android:paddingTop="@dimen/padding"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Large"
-                android:text="Trending this week"
-                android:textAlignment="center"
-                android:visibility="gone"
-                />
-            <ListView
-                android:id="@+id/list2"
-                android:layout_width="match_parent"
-                android:layout_height="480dp"
-                />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/stats"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/margin"
+                android:backgroundTint="@color/black"
+                android:text="Stats"
+                app:icon="@drawable/ic_spa_black"
+                android:visibility="gone"/>
 
         </LinearLayout>
-        </ScrollView>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -246,7 +220,6 @@
                 android:elevation="@dimen/elevation2"
                 app:layout_anchor="@id/bar"
                 app:pressedTranslationZ="20dp"
-                app:rippleColor="@color/black"
                 app:srcCompat="@drawable/ic_home_white" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -3,7 +3,6 @@ package life.soundandcolor.snc.utilities
 import com.github.kittinunf.fuel.Fuel
 import org.json.JSONArray
 import org.json.JSONObject
-import timber.log.Timber
 
 object NetworkUtils {
 
@@ -18,18 +17,18 @@ object NetworkUtils {
         return  res
     }
 
-    fun getFriends(username: String): JSONArray {
+    fun getFriendNames(username: String): JSONObject {
 
-        val friends = getFriendObjects(username)
+        val friends = getFriends(username)
 
-        val friendNames = JSONArray()
+        val friendNames = JSONObject()
         for (i in 0 until friends.length())
-            friendNames.put(friends.getJSONObject(i).getString("display_name"))
+            friendNames.put(friends.getJSONObject(i).getString("id"), friends.getJSONObject(i).getString("display_name"))
 
         return friendNames
     }
 
-    fun getFriendObjects(username: String): JSONArray {
+    fun getFriends(username: String): JSONArray {
         val params = listOf("username" to username)
         return JSONArray(getRequest("get-friends", params))
     }

@@ -61,7 +61,6 @@ class Content : Fragment() {
 
         myDb = DatabaseHelper(context)
         res = myDb.get_current()
-        res.moveToFirst()
         username = res.getString(0)
         name = res.getString(1)
 
@@ -71,7 +70,7 @@ class Content : Fragment() {
         val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mRecyclerView!!.setLayoutManager(layoutManager)
 
-        contentAdapter = ContentAdapter(id!!, username)
+        contentAdapter = ContentAdapter(id!!, name)
         mRecyclerView!!.adapter = contentAdapter
 
         if (!filter.equals("0")) { // woah calm down bro this should not be here
@@ -111,7 +110,7 @@ class Content : Fragment() {
 //                }
 //            }
             //
-            val data = Array<String>(arr!!.length()) { arr.optString(it) }
+            val data = Array<String>(arr.length()) { arr.optString(it) }
             /*
              * Use this setting to improve performance if you know that changes in content do not
             * change the child layout size in the RecyclerView
@@ -285,7 +284,7 @@ class Content : Fragment() {
 //                        }
 //                    }
 //                }
-                simpleData = Array<String>(arr!!.length()) { arr.optString(it) }
+                simpleData = Array<String>(arr.length()) { arr.optString(it) }
                 return simpleData
 
             } catch (e: Exception) {
@@ -322,8 +321,8 @@ class Content : Fragment() {
         when (item!!.itemId) {
             R.id.Analysis -> {
                 var ids = ""
-                for (item in simpleData!!) {
-                    ids += JSONObject(item).getString("id") + ","
+                for (row in simpleData!!) {
+                    ids += JSONObject(row).getString("id") + ","
                 }
 //                val idBundle = Bundle()
 //                idBundle.putString("nameArg", jsonResponse.toString())

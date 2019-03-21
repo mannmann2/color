@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:layout_gravity="center"
-                android:text="LOGIN"
+                android:focusable="true" android:text="LOGIN"
                 android:textSize="48dp" />
 
             <TextView
@@ -100,8 +100,7 @@
                 android:clickable="true"
                 android:elevation="@dimen/elevation2"
                 app:layout_anchor="@id/bar1"
-                app:pressedTranslationZ="20dp"
-                app:rippleColor="@color/black"
+                android:focusable="true" app:pressedTranslationZ="20dp"
                 app:srcCompat="@drawable/ic_people_white" />
 
             <androidx.appcompat.view.menu.ActionMenuItemView

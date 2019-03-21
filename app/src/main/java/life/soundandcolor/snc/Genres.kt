@@ -14,7 +14,6 @@ import life.soundandcolor.snc.databinding.GenresBinding
 import life.soundandcolor.snc.utilities.DatabaseHelper
 import life.soundandcolor.snc.utilities.NetworkUtils
 import org.json.JSONArray
-import kotlin.collections.ArrayList
 
 class Genres : Fragment() {
 
@@ -28,7 +27,6 @@ class Genres : Fragment() {
         myDb = DatabaseHelper(context)
 
         val res = myDb.get_current()
-        res.moveToFirst()
 
         val user = res.getString(0)
 //        val token = res.getString(1)
@@ -58,7 +56,7 @@ class Genres : Fragment() {
 //        }
 
         artists = ArrayList<String>()
-        for (i in 0 until jsonResponse!!.length()) {
+        for (i in 0 until jsonResponse.length()) {
             var temp = jsonResponse.getJSONArray(i)
             artists.add(temp.getString(0)+ "  •  " + temp.getString(1))
         }
