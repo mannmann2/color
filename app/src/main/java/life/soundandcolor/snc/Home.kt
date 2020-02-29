@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.view.*
 import android.widget.LinearLayout
+import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.github.kittinunf.fuel.Fuel
 import com.spotify.sdk.android.authentication.AuthenticationClient
 import com.spotify.sdk.android.authentication.AuthenticationRequest
@@ -40,19 +42,37 @@ class Home : Fragment() {
 //    private var mAccessToken: String? = null
     private var mAccessCode: String? = null
 
-    private var mRecyclerView: RecyclerView? = null
-    private var layoutManager: LinearLayoutManager? = null
-    lateinit internal var feedAdapter: FeedAdapter
+//    private var mRecyclerView: RecyclerView? = null
+//    private var layoutManager: LinearLayoutManager? = null
+//    lateinit internal var feedAdapter: FeedAdapter
+    private var mRecyclerView: ListView? = null
+    internal lateinit var feedAdapter: HomeAdapter
+    internal lateinit var swipe: SwipeRefreshLayout
 
     private var mErrorMessageDisplay: TextView? = null
     private var mLoadingIndicator: ProgressBar? = null
     var loadMore: Boolean = false
-    lateinit internal var myDb: DatabaseHelper
-    lateinit internal var res: Cursor
-    lateinit internal var feed: Cursor
-    lateinit internal var username: String
-    lateinit internal var name: String
+    internal lateinit var myDb: DatabaseHelper
+    internal lateinit var res: Cursor
+    internal lateinit var feed: Cursor
+    internal lateinit var username: String
+    internal lateinit var name: String
     private var login: LinearLayout? = null
+
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        // Only ever call `setContentView` once right at the top
+//        setContentView(R.layout.activity_main);
+//        // Lookup the swipe container view
+//        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+//        // Setup refresh listener which triggers new data loading
+//        ;
+//        // Configure the refreshing colors
+//        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+//                android.R.color.holo_green_light,
+//                android.R.color.holo_orange_light,
+//                android.R.color.holo_red_light);
+//    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -64,16 +84,22 @@ class Home : Fragment() {
 
         login = binding.login
         mRecyclerView = binding.recyclerview2
+        swipe = binding.swipe
+        swipe.setOnRefreshListener {
+            Fetch().execute()
+        }
+
         res = myDb.get_owner()
+
         if (res.count == 1) {
-            login!!.setVisibility(View.GONE)
-            mRecyclerView!!.setVisibility(View.VISIBLE)
+            login!!.visibility = View.GONE
+            swipe.visibility = View.VISIBLE
             username = res.getString(0)
             name = res.getString(1)
         }
         else {
-            login!!.setVisibility(View.VISIBLE)
-            mRecyclerView!!.setVisibility(View.GONE)
+            login!!.visibility = View.VISIBLE
+            swipe.visibility = View.GONE
         }
 
         binding.loginButton.setOnClickListener { v: View -> onRequestTokenClicked() }
@@ -84,36 +110,23 @@ class Home : Fragment() {
 
 //        mErrorMessageDisplay = binding.errorMessageDisplay
 
-        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        mRecyclerView!!.setLayoutManager(layoutManager)
-
         val feed_data = get_feed()
-        feedAdapter = FeedAdapter() {
+//        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false) // rec
+//        mRecyclerView!!.setLayoutManager(layoutManager) // rec
 
-//            val friends = Helper.getFriends(DatabaseHelper(context))
-//            val trending = ArrayList<String>()
-//            while (friends.moveToNext())
-//                trending.add(friends.getString(0))
-//            val adapter = ArrayAdapter<String>(context, R.layout.simple, trending)
-//            binding.send2.adapter = adapter
-//            binding.send2.visibility = View.VISIBLE
-//
-//            val transaction = activity!!.supportFragmentManager.beginTransaction()
-//            transaction.add(R.id.myNavHostFragment, Share())
-//            transaction.addToBackStack(null)
-//            transaction.commit()
+//        feedAdapter = FeedAdapter() { // rec
+        feedAdapter = HomeAdapter(context!!, feed_data) { // list
             findNavController().navigate(HomeDirections.actionHomeToShare(feed_data[it].toString()))
         }
-
         mRecyclerView!!.adapter = feedAdapter
+//        feedAdapter.setData(feed_data) // rec
+
 //        mRecyclerView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id -> }
 
 //        mLoadingIndicator = binding.pbLoadingIndicator
 //        var data = Array<String>(arr!!.length()) {arr.optString(it)}
         (activity as AppCompatActivity).supportActionBar?.title = "Feed"
         (activity as AppCompatActivity).supportActionBar!!.isHideOnContentScrollEnabled = true
-
-        feedAdapter.setData(feed_data)
 
         setHasOptionsMenu(true)
         return binding.root
@@ -125,10 +138,11 @@ class Home : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item!!.itemId == R.id.refresh) {
-            Fetch().execute()
-        }
-        else if (item.itemId == R.id.chats) {
+//        if (item!!.itemId == R.id.refresh) {
+//            Fetch().execute()
+//        }
+//        else
+        if (item!!.itemId == R.id.chats) {
             findNavController().navigate(HomeDirections.actionHomeToChats())
         }
         else {
@@ -212,7 +226,9 @@ class Home : Fragment() {
 
         override fun onPostExecute(data: Array<String>?) {
             feedAdapter.setData(get_feed())
-            layoutManager!!.scrollToPositionWithOffset(0, 0);
+            mRecyclerView!!.smoothScrollToPosition(0) // list
+//            layoutManager!!.scrollToPositionWithOffset(0, 0) // rec
+            swipe.isRefreshing = false
         }
     }
 
@@ -303,8 +319,8 @@ class Home : Fragment() {
         myDb.add(kkk, myDb.writableDatabase, "users")
         myDb.change(username)
 
-        login!!.setVisibility(View.GONE)
-        mRecyclerView!!.setVisibility(View.VISIBLE)
+        login!!.visibility = View.GONE
+        mRecyclerView!!.visibility = View.VISIBLE
         fragmentManager!!.beginTransaction().detach(this).attach(this).commit()
 //        }
     }

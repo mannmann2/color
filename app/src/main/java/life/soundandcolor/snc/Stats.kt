@@ -16,6 +16,9 @@ import com.jjoe64.graphview.series.DataPoint
 import life.soundandcolor.snc.databinding.StatsBinding
 import org.json.JSONArray
 import java.text.SimpleDateFormat
+import com.jjoe64.graphview.DefaultLabelFormatter
+
+
 
 class Stats : Fragment() {
 
@@ -41,24 +44,28 @@ class Stats : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
+
+
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.stats, container, false)
 
         val len = timeline.length()
+        val format = SimpleDateFormat("dd//MM")
         var formatter = SimpleDateFormat("yyyy-MM-dd'T00:00:00.000Z'")
         val series = BarGraphSeries<DataPoint>()
-        for (i in 3..len-1) {
+        for (i in 0..len-1) {
             val temp = timeline.getJSONObject(i)
 //            if (i==0)
 //                d1 = formatter.parse(temp.getString("key_as_string"))
 //            else if (i==len-5)
 //                d3 = formatter.parse(temp.getString("key_as_string"))
-            series.appendData(DataPoint(formatter.parse(temp.getString("key_as_string")), temp.getInt("doc_count").toDouble()), true, len-3)
+            series.appendData(DataPoint(formatter.parse(temp.getString("key_as_string")), temp.getInt("doc_count").toDouble()), true, len)
         }
+
         val graph = binding.graph
         graph.addSeries(series)
-        graph.getGridLabelRenderer().setLabelFormatter(DateAsXAxisLabelFormatter(getActivity()));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(len-3)
+        graph.gridLabelRenderer.setLabelFormatter(DateAsXAxisLabelFormatter(getActivity(), format))
+        graph.getGridLabelRenderer().setNumHorizontalLabels(len)
 //        graph.getViewport().setMinX(d1.time.toDouble())
 //        graph.getViewport().setMaxX(d3.time.toDouble())
         graph.getViewport().setXAxisBoundsManual(true)

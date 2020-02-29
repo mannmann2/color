@@ -2,12 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="life.soundandcolor.snc.Home">
-
+    tools:context="life.soundandcolor.snc.Home"
+    android:paddingTop="?attr/actionBarSize"
+    >
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        >
         <LinearLayout
             android:id="@+id/login"
             android:layout_width="match_parent"
@@ -34,7 +35,8 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:layout_gravity="center"
-                android:focusable="true" android:text="LOGIN"
+                android:focusable="true"
+                android:text="LOGIN"
                 android:textSize="48dp" />
 
             <TextView
@@ -49,36 +51,23 @@
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview2"
-            android:layout_width="match_parent"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingTop="?attr/actionBarSize"
-            />
-
-        <!--<fragment-->
-            <!--android:id="@+id/send3"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_margin="70dp"-->
-            <!--/>-->
-
-        <ListView
-            android:id="@+id/send2"
-            android:elevation="20dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="40dp"
-            android:layout_marginVertical="70dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:background="@color/colorPrimary"
-            android:visibility="gone">
-            <!--android:textSize="56dp"-->
-            <!--android:textColor="@color/colorPrimaryDark"-->
-            <!--android:text="@string/welcome"-->
-        </ListView>
+            >
+
+            <!--<androidx.recyclerview.widget.RecyclerView-->
+                <!--android:id="@+id/recyclerview2"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:clipToPadding="false"-->
+                <!--/>-->
+            <ListView
+                android:id="@+id/recyclerview2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -100,7 +89,8 @@
                 android:clickable="true"
                 android:elevation="@dimen/elevation2"
                 app:layout_anchor="@id/bar1"
-                android:focusable="true" app:pressedTranslationZ="20dp"
+                android:focusable="true"
+                app:pressedTranslationZ="20dp"
                 app:srcCompat="@drawable/ic_people_white" />
 
             <androidx.appcompat.view.menu.ActionMenuItemView

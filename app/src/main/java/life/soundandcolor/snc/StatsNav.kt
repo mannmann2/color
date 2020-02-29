@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
@@ -13,6 +14,14 @@ import life.soundandcolor.snc.databinding.StatsBinding
 import life.soundandcolor.snc.utilities.DatabaseHelper
 import org.json.JSONArray
 import java.util.ArrayList
+import androidx.viewpager.widget.ViewPager
+import android.view.MenuItem
+import androidx.annotation.NonNull
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
+
+
+
 
 class StatsNav : Fragment() {
 
@@ -57,5 +66,25 @@ class StatsNav : Fragment() {
 //            }
 //        }
         bottomNavigation.setupWithNavController(navController)
+
+//        bottomNavigation.setOnNavigationItemSelectedListener(
+//                object : BottomNavigationView.OnNavigationItemSelectedListener {
+//                    fun onNavigationItemSelected(item: MenuItem): Boolean {
+//                        when (item.getItemId()) {
+////                            R.id.stats -> binding.viewpager.setCurrentItem(0)
+////                            R.id.statsTracks -> binding.viewpager.setCurrentItem(1)
+////                            R.id.action_contact -> binding.viewpager.setCurrentItem(2)
+//                        }
+//                        return false
+//                    }
+//                })
     }
+
+//    fun setupViewPager(viewPager: ViewPager) {
+//        val adapter = ViewPagerAdapter(getSupportFragmentManager())
+//        adapter.addFragment(Stats())
+//        adapter.addFragment(StatsTracks())
+//        adapter.addFragment(StatsArtists())
+//        viewPager.adapter = adapter
+//    }
 }
