@@ -38,14 +38,14 @@ class Analysis : Fragment() {
         res = myDb.get_owner()
 
         val user = res.getString(0)
-//        val token = res.getString(1)
-//        val refresh = res.getString(2)
+        val token = res.getString(3)
+        val refresh = res.getString(4)
 
-//        var jsonResponse = NetworkUtils.getRequest("https://api.spotify.com/v1/audio-features",
-//                      listOf("usernames" to usernames), token, refresh, myDb)
-//        var json = jsonResponse!!.getJSONArray("audio_features")
-        var json = JSONArray(NetworkUtils.getRequest("features", listOf("username" to user, "ids" to ids)))
-        var L = json.length()
+        var jsonResponse = NetworkUtils.getRequest("audio-features",
+                      listOf("ids" to ids), token, refresh, myDb)
+        var json = jsonResponse!!.getJSONArray("audio_features")
+//        var json = JSONArray(NetworkUtils.getRequest("features", listOf("username" to user, "ids" to ids)))
+        var L = json!!.length()
 
         var keys = listOf("danceability", "energy", "loudness", "speechiness", "acousticness", "instrumentalness", "liveness", "valence", "mode", "tempo", "duration_ms")
         var D = JSONObject()
@@ -74,11 +74,11 @@ class Analysis : Fragment() {
         binding.analysisText.text = text
 
         if (from == "feed") {
-//            jsonResponse = NetworkUtils.getRequest("https://api.spotify.com/v1/recommendations",
-//                    listOf("seed_tracks" to usernames), token, refresh, myDb)
-//            var json = jsonResponse!!.getJSONArray("tracks")
-            json = JSONArray(NetworkUtils.getRequest("recommendations",
-                    listOf("username" to user, "seed_tracks" to ids)))
+            jsonResponse = NetworkUtils.getRequest("recommendations",
+                    listOf("seed_tracks" to ids), token, refresh, myDb)
+            var json = jsonResponse!!.getJSONArray("tracks")
+//            json = JSONArray(NetworkUtils.getRequest("recommendations",
+//                    listOf("username" to user, "seed_tracks" to ids)))
 
             val listItems = ArrayList<String>()
             for (i in 0 until json.length()) {

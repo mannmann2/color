@@ -79,6 +79,10 @@ class Profile : Fragment() {
             v.findNavController().navigate(ProfileDirections.actionProfileToContent("Saved Albums", v.getTag().toString()))
         }
 
+        binding.newRel.setOnClickListener { v: View ->
+            v.findNavController().navigate(ProfileDirections.actionProfileToContent("New Releases", v.getTag().toString()))
+        }
+
         binding.genres.setOnClickListener { v: View ->
             v.findNavController().navigate(ProfileDirections.actionProfileToGenres())
         }
@@ -108,10 +112,16 @@ class Profile : Fragment() {
 //        }
         if (res.getString(0).equals(owner)) {
 
+            binding.stats.visibility = View.VISIBLE
+
             binding.stats.setOnClickListener { v: View ->
                 v.findNavController().navigate(ProfileDirections.actionProfileToStatsNav())
             }
-            binding.stats.visibility = View.VISIBLE
+            binding.forYou.visibility = View.VISIBLE
+
+            binding.forYou.setOnClickListener { v: View ->
+                v.findNavController().navigate(ProfileDirections.actionProfileToContent("For You", v.getTag().toString()))
+            }
         }
 //        (activity as AppCompatActivity).supportActionBar?.title = "Sound & Color"
         (activity as AppCompatActivity).supportActionBar!!.isHideOnContentScrollEnabled = false

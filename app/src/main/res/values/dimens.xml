@@ -14,8 +14,9 @@
     <dimen name="elevation">4dp</dimen>
     <dimen name="elevation2">12dp</dimen>
 
-    <dimen name="text_size">14sp</dimen>
-    <dimen name="text_size2">16sp</dimen>
+    <dimen name="text_size_sm">12sp</dimen>
+    <dimen name="text_size">13sp</dimen>
+    <dimen name="text_size2">15sp</dimen>
     <dimen name="text_size3">18sp</dimen>
     <dimen name="button_text_size">16sp</dimen>
 

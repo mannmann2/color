@@ -47,8 +47,10 @@ class Users : Fragment() {
         usernames.add(owner)
         listItems.add("")
 
-        js = getFriends(owner)
+        js = getFriends(context!!, owner)
+        Timber.e(js.toString())
         for (i in 0 until js.length()) {
+
             val temp = js.getJSONObject(i)
 
             val kkk = JSONObject()
@@ -58,6 +60,8 @@ class Users : Fragment() {
             if (images!=null && images.length() > 0)
                 kkk.put("img", images.getJSONObject(0).getString("url"))
             kkk.put("email", temp.getString("email"))
+            kkk.put("token", temp.getString(("access_token")))
+            kkk.put("refresh", temp.getString(("refresh_token")))
             myDb.add(kkk, myDb.writableDatabase, "users")
 
             names.add(temp.getString("display_name"))

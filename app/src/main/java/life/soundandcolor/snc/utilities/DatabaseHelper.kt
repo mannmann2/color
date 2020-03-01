@@ -15,8 +15,8 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
         db.execSQL("drop table if exists $TABLE_NAME")
         db.execSQL("drop table if exists $TABLE_NAME2")
         db.execSQL("drop table if exists $TABLE_NAME3")
-        db.execSQL("create table $TABLE_NAME ($COL_1 TEXT primary key, $COL_2 TEXT, $COL_3 TEXT, $COL_4 TEXT, $COL_5 boolean);")
-        db.execSQL("create table $TABLE_NAME2 ($COL_1 TEXT primary key, $COL_2 TEXT, $COL_3 TEXT, $COL_4 TEXT, $COL_5 boolean);")
+        db.execSQL("create table $TABLE_NAME ($COL_1 TEXT primary key, $COL_2 TEXT, $COL_3 TEXT, $COL_4 TEXT, $COL_5 boolean, $COL_6 TEXT, $COL_7 TEXT);")
+        db.execSQL("create table $TABLE_NAME2 ($COL_1 TEXT primary key, $COL_2 TEXT, $COL_3 TEXT, $COL_4 TEXT, $COL_5 boolean, $COL_6 TEXT, $COL_7 TEXT);")
         db.execSQL("create table $TABLE_NAME3 (username TEXT, display_name TEXT, name TEXT, id TEXT, url TEXT, album TEXT, img TEXT, artist TEXT, duration TEXT, " +
                 "type TEXT, timestamp LONG, primary key(username, timestamp));")
 //        db.execSQL("create table $TABLE_NAME4 (username TEXT, name TEXT, id TEXT, url TEXT, img TEXT," +
@@ -40,7 +40,7 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
 
     fun get_current(): Cursor {
         val db = this.writableDatabase
-        val res = db.rawQuery("select $COL_1, $COL_2 from $TABLE_NAME2;", null)
+        val res = db.rawQuery("select $COL_1, $COL_2, $COL_6, $COL_7 from $TABLE_NAME2;", null)
         res.moveToFirst()
         return res
     }
@@ -70,9 +70,9 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
     fun change(user: String) {
         val db = this.writableDatabase
         db.execSQL("drop table if exists $TABLE_NAME2") // dont drop just update
-        db.execSQL("create table $TABLE_NAME2 ($COL_1 TEXT primary key, $COL_2 TEXT, $COL_3 TEXT, $COL_4 TEXT, $COL_5 boolean);")
+        db.execSQL("create table $TABLE_NAME2 ($COL_1 TEXT primary key, $COL_2 TEXT, $COL_3 TEXT, $COL_4 TEXT, $COL_5 boolean, $COL_6 TEXT, $COL_7 TEXT);")
 
-        val res = db.rawQuery("select $COL_2,$COL_3,$COL_4,$COL_5 from $TABLE_NAME where username = '$user';", null)
+        val res = db.rawQuery("select $COL_2,$COL_3,$COL_4,$COL_5,$COL_6,$COL_7 from $TABLE_NAME where username = '$user';", null)
         res.moveToFirst()
 
         val cv = ContentValues()
@@ -81,13 +81,15 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
         cv.put(COL_3, res.getString(1))
         cv.put(COL_4, res.getString(2))
         cv.put(COL_5, res.getString(3))
+        cv.put(COL_6, res.getString(4))
+        cv.put(COL_7, res.getString(5))
         db.insert(TABLE_NAME2, null, cv)
     }
 
 
     fun get_owner(): Cursor {
         val db = this.writableDatabase
-        val res = db.rawQuery("select $COL_1, $COL_2, $COL_3 from $TABLE_NAME where owner is not null;", null)
+        val res = db.rawQuery("select $COL_1, $COL_2, $COL_3, $COL_6, $COL_7 from $TABLE_NAME where owner is not null;", null)
         res.moveToFirst()
         return res
     }
@@ -101,17 +103,17 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
 
 //    -------------------------------------------MESSAGES-----------------------------------------------
 
-    fun chats(): Cursor {
-        val db = this.writableDatabase
-        val res = db.rawQuery("select distinct(username) from $TABLE_NAME;", null)
-        return res
-    }
-
-    fun messages(user: String): Cursor {
-        val db = this.writableDatabase
-        val res = db.rawQuery("select message, sent from $TABLE_NAME5 where username = $user;", null)
-        return res
-    }
+//    fun chats(): Cursor {
+//        val db = this.writableDatabase
+//        val res = db.rawQuery("select distinct(username) from $TABLE_NAME;", null)
+//        return res
+//    }
+//
+//    fun messages(user: String): Cursor {
+//        val db = this.writableDatabase
+//        val res = db.rawQuery("select message, sent from $TABLE_NAME5 where username = $user;", null)
+//        return res
+//    }
 
     fun send(user: String, message: String, sent: Int) {
         val js = JSONObject()
@@ -137,6 +139,8 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
         val COL_3 = "img"
         val COL_4 = "email"
         val COL_5 = "owner"
+        val COL_6 = "token"
+        val COL_7 = "refresh"
 
     }
 }

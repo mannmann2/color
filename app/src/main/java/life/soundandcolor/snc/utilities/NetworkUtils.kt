@@ -15,7 +15,6 @@ object NetworkUtils {
 
 //        val (_, response, _) = Fuel.get("https://www.soundandcolor.life/api/v1/" + url, params)
 //                .response()
-
 //        val (_, response, _) = Fuel.get("http://35.154.122.24:5000/api/v1/" + url, params)
 //                .response()
         val (_, response, _) = Fuel.get("https://api.spotify.com/api/v1/" + url, params)

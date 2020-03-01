@@ -25,7 +25,7 @@ class Chats : Fragment() {
         val myDb = DatabaseHelper(context)
         val res = myDb.get_owner()
 
-        val js = getFriends(res.getString(0))
+        val js = getFriends(context!!, res.getString(0))
         usernames = ArrayList<String>()
         names = ArrayList<String>()
         for (i in 0 until js.length()) {

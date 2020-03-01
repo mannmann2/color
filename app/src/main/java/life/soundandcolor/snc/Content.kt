@@ -38,6 +38,8 @@ class Content : Fragment() {
     private  var base: String? = null
     lateinit internal var title: String
     lateinit internal var username: String
+    lateinit internal var token: String
+    lateinit internal var refresh: String
     lateinit internal var name: String
     lateinit internal var url: String
     lateinit internal var params: List<Pair<String, String>>
@@ -63,6 +65,8 @@ class Content : Fragment() {
         res = myDb.get_current()
         username = res.getString(0)
         name = res.getString(1)
+        token = res.getString(2)
+        refresh = res.getString(3)
 
         mRecyclerView = binding.recyclerviewForecast
         mErrorMessageDisplay = binding.errorMessageDisplay
@@ -128,14 +132,14 @@ class Content : Fragment() {
                     val totalItemCount = recyclerView.layoutManager!!.itemCount
                     if (mLoadingIndicator!!.visibility == View.INVISIBLE && totalItemCount > 13 &&
                             totalItemCount <= layoutManager.findLastVisibleItemPosition() + 2) {
-                        if (id == "Following" || id == "Saved Tracks" || id == "Saved Albums") {
+                        if (id == "Following" || id == "Saved Tracks" || id == "Saved Albums" || id=="New Releases" || id=="For You") {
                             if (totalItemCount % 50 == 0) {
                                 contentAdapter.loading()
                                 when (id) {
                                     "Following" -> {
                                         after = JSONObject(simpleData!![simpleData!!.size - 1]).getString("id").toString()
                                     }
-                                    "Saved Tracks", "Saved Albums" -> {
+                                    "Saved Tracks", "Saved Albums", "New Releases", "For You" -> {
                                         offset = totalItemCount
                                     }
                                     //                                "Recent" -> {
@@ -241,36 +245,56 @@ class Content : Fragment() {
             Timber.e("User " + username)
 
             if (extra == "following") {
-                url = "following"
-                params = listOf(AFTER_PARAM to after!!, "username" to username)
+//                url = "following"
+//                params = listOf(AFTER_PARAM to after!!, "username" to username)
+                url = "me/following"
+                params = listOf(AFTER_PARAM to after!!, "type" to "artist", LIMIT_PARAM to "50")
             }
             else if (extra == "recent") {
-                url = "recently-played"
-                params = listOf("username" to username)
+//                url = "recently-played"
+//                params = listOf("username" to username)
+                url = "me/player/recently-played"
+                params = listOf("limit" to "50")
             }
             else if (extra == "albums") {
-                url = "saved-albums"
-                params = listOf(OFFSET_PARAM to Integer.toString(offset), "username" to username)
+//                url = "saved-albums"
+//                params = listOf(OFFSET_PARAM to Integer.toString(offset), "username" to username)
+                url = "me/albums"
+                params = listOf(OFFSET_PARAM to Integer.toString(offset), LIMIT_PARAM to "50")
+
             }
             else if (extra == "tracks") {
-                url = "saved-tracks"
-                params = listOf(OFFSET_PARAM to Integer.toString(offset), "username" to username)
+//                url = "saved-tracks"
+//                params = listOf(OFFSET_PARAM to Integer.toString(offset), "username" to username)
+                url = "me/tracks"
+                params = listOf(OFFSET_PARAM to Integer.toString(offset), LIMIT_PARAM to "50")
+
+            }
+            else if (extra == "new") {
+                url = "browse/new-releases"
+                params = listOf(OFFSET_PARAM to Integer.toString(offset), LIMIT_PARAM to "50")
+            }
+            else if (extra == "forYou") {
+                url = "playlists/37i9dQZEVXbrj2vnshMROX/tracks"
+                params = listOf(OFFSET_PARAM to Integer.toString(offset), LIMIT_PARAM to "100")
             }
             else {
                 if (id!! == "Top Artists")
                     base = "artists"
                 else
                     base = "tracks"
-
-                url = "top-" + base
-                params = listOf("time" to extra!!, LIMIT_PARAM to Integer.toString(limit1),
-                        OFFSET_PARAM to Integer.toString(offset), "username" to username)
+//                url = "top-$base"
+//                params = listOf("time" to extra!!, LIMIT_PARAM to Integer.toString(limit1),
+//                        OFFSET_PARAM to Integer.toString(offset), "username" to username)
+                url = "me/top/$base"
+                params = listOf("time_range" to extra!!, LIMIT_PARAM to Integer.toString(limit1),
+                        OFFSET_PARAM to Integer.toString(offset))
             }
 
             try {
-//                val jsonResponse = NetworkUtils.getRequest(url, params, token, refresh, myDb)
-                val jsonResponse = JSONObject(NetworkUtils.getRequest(url, params))
-                var arr = ParseUtils.getSimpleStringsFromJson(context!!, jsonResponse, id!!, username, name)!!
+                val jsonResponse = NetworkUtils.getRequest(url, params, token, refresh, myDb)
+//                val jsonResponse = JSONObject(NetworkUtils.getRequest(url, params))
+                var arr = ParseUtils.getSimpleStringsFromJson(context!!, jsonResponse!!, id!!, username, name)!!
 //                if (extra == "recent") {
 //                    arr = JSONArray()
 //                    val rec = myDb.get("feed")

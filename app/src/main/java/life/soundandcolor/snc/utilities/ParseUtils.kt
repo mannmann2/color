@@ -6,6 +6,7 @@ import life.soundandcolor.snc.utilities.Helper.toTimestamp
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import timber.log.Timber
 
 object ParseUtils {
 
@@ -100,7 +101,7 @@ object ParseUtils {
                 else {
                     val res = myDb.get_owner()
                     val username = res.getString(0)
-                    map = NetworkUtils.getFriendNames(username)
+                    map = NetworkUtils.getFriendNames(context, username)
                     map.put(username, res.getString(1))
                 }
                 val weatherArray = json.getJSONArray("items")
@@ -127,9 +128,8 @@ object ParseUtils {
                     temp.put("type", "track")
                     parsedData.put(i, temp)
 
-                    val display_username = dayForecast.getString("played_by")
-                    temp.put("username", display_username)
-                    temp.put("display_name", map.getString(display_username))
+                    temp.put("username", user)
+                    temp.put("display_name", map.getString(user))
                     myDb.add(temp, myDb.writableDatabase, "feed")
                 }
                 return parsedData
@@ -170,13 +170,72 @@ object ParseUtils {
                     temp.put("url", a.getJSONObject("external_urls").getString("spotify"))
                     temp.put("id", a.getString("id"))
                     temp.put("release", a.getString("release_date"))
-                    temp.put("pop", a.getJSONArray("artists")
+                    temp.put("artist", a.getJSONArray("artists")
                             .getJSONObject(0).getString("name"))
                     temp.put("artist_id", a.getJSONArray("artists")
                             .getJSONObject(0).getString("id"))
                     temp.put("img", a.getJSONArray("images").getJSONObject(0)
                             .getString("url"))
-                    temp.put("type", "artist")
+                    temp.put("text3", a.getString("release_date"))
+                    temp.put("type", "album")
+                    parsedData.put(i, temp)
+                }
+                return parsedData
+            }
+
+            "New Releases" -> {
+                val weatherArray = json.getJSONObject("albums").getJSONArray("items")
+                Timber.e(weatherArray.length().toString())
+                for (i in 0 until weatherArray.length()) {
+
+                    val a = weatherArray.getJSONObject(i)
+                    val temp = JSONObject()
+                    temp.put("name", a.getString("name"))
+                    temp.put("url", a.getJSONObject("external_urls").getString("spotify"))
+                    temp.put("id", a.getString("id"))
+                    temp.put("release", a.getString("release_date"))
+                    temp.put("artist", a.getJSONArray("artists")
+                            .getJSONObject(0).getString("name"))
+                    temp.put("artist_id", a.getJSONArray("artists")
+                            .getJSONObject(0).getString("id"))
+                    temp.put("img", a.getJSONArray("images").getJSONObject(0)
+                            .getString("url"))
+                    temp.put("text3", a.getString("release_date"))
+                    temp.put("text4", a.getString("album_type"))
+                    temp.put("type", "album")
+                    parsedData.put(i, temp)
+                }
+                return parsedData
+            }
+
+            "For You" -> {
+                val weatherArray = json.getJSONArray("items")
+                Timber.e(weatherArray.length().toString())
+                for (i in 0 until weatherArray.length()) {
+
+                    val dayForecast = weatherArray.getJSONObject(i)
+                    var a: JSONObject
+                    try {
+                         a = dayForecast.getJSONObject("track").getJSONObject("album")
+                    }
+                    catch (e: JSONException) {
+                        Timber.e("Caught" + i.toString())
+                        continue
+                    }
+
+                    val temp = JSONObject()
+                    temp.put("name", a.getString("name"))
+                    temp.put("url", a.getJSONObject("external_urls").getString("spotify"))
+                    temp.put("id", a.getString("id"))
+                    temp.put("release", a.getString("release_date"))
+                    temp.put("artist", a.getJSONArray("artists")
+                            .getJSONObject(0).getString("name"))
+                    temp.put("artist_id", a.getJSONArray("artists")
+                            .getJSONObject(0).getString("id"))
+                    temp.put("img", a.getJSONArray("images").getJSONObject(0)
+                            .getString("url"))
+                    temp.put("text3", a.getString("album_type"))
+                    temp.put("type", "album")
                     parsedData.put(i, temp)
                 }
                 return parsedData

@@ -189,6 +189,13 @@
                 <!--android:layout_margin="@dimen/margin"-->
                 <!--android:tag="short_term"-->
                 <!--android:text="Run" />-->
+        <LinearLayout
+            android:id="@+id/personal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/stats"
                 android:layout_width="wrap_content"
@@ -198,6 +205,26 @@
                 android:text="Stats"
                 app:icon="@drawable/ic_spa_black"
                 android:visibility="gone"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/for_you"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/margin"
+                android:backgroundTint="@color/black"
+                android:tag="forYou"
+                android:text="For you"
+                app:icon="@drawable/ic_sync_black"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/new_rel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"
+                android:tag="new"
+                android:text="New Releases" />
 
         </LinearLayout>
 

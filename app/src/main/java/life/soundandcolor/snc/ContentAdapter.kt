@@ -23,20 +23,22 @@ class ContentAdapter(id: String, name: String) : RecyclerView.Adapter<RecyclerVi
 
     inner class ArtistAdapterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+        val mNum: TextView
+        val mImgView: ImageView
         val mTextView: TextView
         val mTextView2: TextView
         val mTextView3: TextView
         val mTextView4: TextView
-        val mImgView: ImageView
         val relLay: RelativeLayout
 
         init {
-            relLay = view.findViewById(R.id.item)
+            mNum = view.findViewById(R.id.num)
             mImgView = view.findViewById(R.id.item_img)
             mTextView = view.findViewById(R.id.item_data)
             mTextView2 = view.findViewById(R.id.item_data2)
-            mTextView3 = view.findViewById(R.id.num)
-            mTextView4 = view.findViewById(R.id.item_data3)
+            mTextView3 = view.findViewById(R.id.item_data3)
+            mTextView4 = view.findViewById(R.id.item_data4)
+            relLay = view.findViewById(R.id.item)
 
             relLay.setOnClickListener {
                 Helper.play(view)
@@ -63,7 +65,7 @@ class ContentAdapter(id: String, name: String) : RecyclerView.Adapter<RecyclerVi
                                     shareBody += "Here's a song from " + name + "'s " + id + "... " +
                                             mTextView.text.split("  •  ")[0] + " by " + mTextView2.text
                                 }
-                                "Saved Albums" -> {
+                                "Saved Albums", "New Releases", "For You" -> {
                                     shareBody += "Here's an album from " + name + "'s " + id + "... " + mTextView2.text
                                 }
                             }
@@ -138,7 +140,7 @@ class ContentAdapter(id: String, name: String) : RecyclerView.Adapter<RecyclerVi
                             .error(R.drawable.ic_launcher_background)
                             .resize(512, 512).into(holder.mImgView)
 
-                holder.mTextView3.text = (position+1).toString()
+                holder.mNum.text = (position+1).toString()
                 holder.relLay.tag = js.getString("url")
                 val type = js.getString("type")
                 if (type == "artist") {
@@ -160,12 +162,24 @@ class ContentAdapter(id: String, name: String) : RecyclerView.Adapter<RecyclerVi
 
                     if (id=="Recent") {
                         holder.mTextView.gravity = Gravity.TOP
-                        holder.mTextView.setPadding(0,16,0,0)
+                        holder.mTextView.setPadding(0,24,0,0)
                         holder.mTextView2.gravity = Gravity.TOP
-                        holder.mTextView2.setPadding(0,16,0,0)
-                        holder.mTextView4.visibility = View.VISIBLE
-                        holder.mTextView4.text = Helper.displayTime(js.getString("timestamp"))
+                        holder.mTextView2.setPadding(0,24,0,0)
+                        holder.mTextView3.visibility = View.VISIBLE
+                        holder.mTextView3.text = Helper.displayTime(js.getString("timestamp"))
                     }
+                }
+                else if (type == "album") {
+                    holder.mTextView.text = js.getString("name")
+                    holder.mTextView2.text = js.getString("artist")
+                    holder.mTextView.gravity = Gravity.TOP
+                    holder.mTextView.setPadding(0,36,0,0)
+                    holder.mTextView2.gravity = Gravity.TOP
+                    holder.mTextView2.setPadding(0,36,0,0)
+                    holder.mTextView3.visibility = View.VISIBLE
+                    holder.mTextView4.visibility = View.VISIBLE
+                    holder.mTextView3.text = js.getString("text3")
+                    holder.mTextView4.text = js.getString("text4")
                 }
 
             } catch (e: JSONException) { }
