@@ -281,10 +281,9 @@ class Home : Fragment() {
         Timber.e("token " + token)
         Timber.e("refresh " + refresh)
 
-//        val json = NetworkUtils.getRequest("https://api.spotify.com/v1/me", null, token, refresh, myDb)
-        val json = JSONObject(NetworkUtils.getRequest("login",
-                listOf("access_token" to token, "refresh_token" to refresh)))
-        val username = json.getString("id")
+//        val json = JSONObject(NetworkUtils.getRequest("login", listOf("access_token" to token, "refresh_token" to refresh)))
+        val json = NetworkUtils.getRequest("https://api.spotify.com/v1/me", null, token, refresh, myDb)
+        val username = json!!.getString("id")
 
         val kkk = JSONObject()
         kkk.put("username", username)
@@ -298,6 +297,8 @@ class Home : Fragment() {
             kkk.put("img", null)
         kkk.put("email", json.getString("email"))
         kkk.put("owner", true)
+        kkk.put("token", token)
+        kkk.put("refresh", refresh)
 
         Timber.e(kkk.toString())
         myDb.add(kkk, myDb.writableDatabase, "users")

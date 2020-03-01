@@ -3,7 +3,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'androidx.navigation.safeargs'
 
 android {
@@ -12,6 +11,7 @@ android {
             keyAlias 'key0'
             keyPassword 'Vivalavida1'
             storeFile file('/Users/tom/Desktop/SnCKey')
+//            storeFile file('D\\:\\git\\color\\SnCKey')
             storePassword 'Vivalavida1'
         }
     }

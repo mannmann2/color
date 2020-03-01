@@ -38,7 +38,7 @@ class Share: Fragment() {
         res = myDb.get_owner()
         res.moveToNext()
         val owner = res.getString(0)
-        val js = getFriends(owner)
+        val js = getFriends(context!!, owner)
 
         var names = ArrayList<String>()
         var usernames = ArrayList<String>()
