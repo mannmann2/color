@@ -29,8 +29,8 @@ class UsersAdapter(private val context: Context, private val names: ArrayList<St
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         val rowView = inflater.inflate(R.layout.user_item, null, true)
 
-        simple1 = rowView.findViewById(R.id.simple1) as TextView
-        simple2 = rowView.findViewById(R.id.simple2) as TextView
+        simple1 = rowView.findViewById(R.id.simple1)
+        simple2 = rowView.findViewById(R.id.simple2)
 
         simple1.text = names[position]
         simple2.text = description!![position]

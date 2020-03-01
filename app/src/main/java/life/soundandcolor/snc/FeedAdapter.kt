@@ -36,8 +36,8 @@ class FeedAdapter(val itemClick: (Int) -> Unit) : RecyclerView.Adapter<RecyclerV
         val like: ImageView
         val analysis: ImageView
         val share: ImageView
-        val queue1: ImageView
-        val queue: ImageView
+//        val queue1: ImageView
+//        val queue: ImageView
         val play: ImageView
         val send: ImageView
 
@@ -50,8 +50,8 @@ class FeedAdapter(val itemClick: (Int) -> Unit) : RecyclerView.Adapter<RecyclerV
             mTextView5 = view.findViewById(R.id.feed_item_data4)
             play = view.findViewById(R.id.feed_play)
             analysis = view.findViewById(R.id.feed_analysis)
-            queue = view.findViewById(R.id.feed_queue)
-            queue1 = view.findViewById(R.id.feed_queue1)
+//            queue = view.findViewById(R.id.feed_queue)
+//            queue1 = view.findViewById(R.id.feed_queue1)
             share = view.findViewById(R.id.feed_share)
             like = view.findViewById(R.id.feed_like)
             send = view.findViewById(R.id.feed_send)
@@ -101,7 +101,6 @@ class FeedAdapter(val itemClick: (Int) -> Unit) : RecyclerView.Adapter<RecyclerV
             val shouldAttachToParentImmediately = false
             val view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately)
             return ArtistAdapterViewHolder(view)
-
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -109,7 +108,7 @@ class FeedAdapter(val itemClick: (Int) -> Unit) : RecyclerView.Adapter<RecyclerV
             try {
                 val js = mData!![position]
                 val img = js!!.getString("img")
-                holder.mImgView.tag = img
+//                holder.mImgView.tag = img
                 if (img.length > 0)
                     Picasso.get().load(img)
                             .placeholder(R.drawable.ic_launcher_background)
@@ -125,7 +124,6 @@ class FeedAdapter(val itemClick: (Int) -> Unit) : RecyclerView.Adapter<RecyclerV
                 holder.mTextView3.text = js.getString("album")
                 holder.mTextView4.text = js.getString("artist")
                 holder.mTextView5.text = Helper.displayTime(js.getString("timestamp"))
-
                 holder.relLay.tag = js.getString("url")
                 holder.analysis.tag = js.getString("id")
 

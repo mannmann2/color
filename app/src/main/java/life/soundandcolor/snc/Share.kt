@@ -36,7 +36,6 @@ class Share: Fragment() {
 
         myDb = DatabaseHelper(context)
         res = myDb.get_owner()
-        res.moveToNext()
         val owner = res.getString(0)
         val js = getFriends(context!!, owner)
 
